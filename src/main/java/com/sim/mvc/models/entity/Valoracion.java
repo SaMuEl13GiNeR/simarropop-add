@@ -19,8 +19,12 @@ public class Valoracion implements Serializable {
 	private String opinion;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "usuario_id_valoracion", nullable = false)
-	private Usuario usuario;
+	@JoinColumn(name = "usuario_id_emisor", nullable = false)
+	private Usuario usuarioEmisor;
+	
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "usuario_id_receptor", nullable = false)
+	private Usuario usuarioReceptor;
 
 	public Long getId() {
 		return id;
@@ -46,34 +50,51 @@ public class Valoracion implements Serializable {
 		this.opinion = opinion;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
+	public Usuario getUsuarioEmisor() {
+		return usuarioEmisor;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setUsuarioEmisor(Usuario usuarioEmisor) {
+		this.usuarioEmisor = usuarioEmisor;
 	}
 
-	public Valoracion(Long id, int estrellas, String opinion, Usuario usuario) {
+	public Usuario getUsuarioReceptor() {
+		return usuarioReceptor;
+	}
+
+	public void setUsuarioReceptor(Usuario usuarioReceptor) {
+		this.usuarioReceptor = usuarioReceptor;
+	}
+
+	public Valoracion(Long id, int estrellas, String opinion, Usuario usuarioEmisor, Usuario usuarioReceptor) {
 		super();
 		this.id = id;
 		this.estrellas = estrellas;
 		this.opinion = opinion;
-		this.usuario = usuario;
+		this.usuarioEmisor = usuarioEmisor;
+		this.usuarioReceptor = usuarioReceptor;
 	}
 
-	public Valoracion(int estrellas, String opinion, Usuario usuario) {
+	public Valoracion(int estrellas, String opinion, Usuario usuarioEmisor, Usuario usuarioReceptor) {
 		super();
 		this.estrellas = estrellas;
 		this.opinion = opinion;
-		this.usuario = usuario;
+		this.usuarioEmisor = usuarioEmisor;
+		this.usuarioReceptor = usuarioReceptor;
+	}
+
+	public Valoracion() {
+		super();
 	}
 
 	@Override
 	public String toString() {
-		return "Valoracion [id=" + id + ", estrellas=" + estrellas + ", opinion=" + opinion + ", usuario=" + usuario
-				+ "]";
+		return "Valoracion [id=" + id + ", estrellas=" + estrellas + ", opinion=" + opinion + ", usuarioEmisor="
+				+ usuarioEmisor + ", usuarioReceptor=" + usuarioReceptor + "]";
 	}
+
+
+
 	
 	
 	

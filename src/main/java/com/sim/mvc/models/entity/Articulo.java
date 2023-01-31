@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 	
 @Entity
-@Table(name="articulo")
+@Table(name="simarropop_articulo")
 public class Articulo implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -27,12 +27,12 @@ public class Articulo implements Serializable {
 	@Column(name="estado")
 	private String estado;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "usuario_id", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@JoinColumn(name = "usuario_id", nullable = true)
 	private Usuario usuario;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "categorai_id", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@JoinColumn(name = "categorai_id", nullable = true)
 	private Categoria categoria;
 
     @OneToMany(mappedBy="articulo")
@@ -152,6 +152,23 @@ public class Articulo implements Serializable {
 		this.categoria = categoria;
 		this.fotos = fotos;
 	}
+	
+
+	public Articulo(String titulo, String descripcion, float precio, String estado, Usuario usuario, Categoria categoria,
+		Set<Foto> fotos) {
+	super();
+	this.titulo = titulo;
+	this.descripcion = descripcion;
+	this.precio = precio;
+	this.estado = estado;
+	this.usuario = usuario;
+	this.categoria = categoria;
+	this.fotos = fotos;
+}
+
+	public Articulo() {
+	super();
+}
 
 	@Override
 	public String toString() {

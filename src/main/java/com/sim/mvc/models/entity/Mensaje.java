@@ -21,8 +21,12 @@ public class Mensaje implements Serializable {
 	private java.sql.Timestamp hora;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "usuario_id", nullable = false)
-	private Usuario usuario;
+	@JoinColumn(name = "usuario_id_emisor", nullable = false)
+	private Usuario usuarioEmisor;
+	
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "usuario_id_receptor", nullable = false)
+	private Usuario usuarioReceptor;
 
 	public Long getId() {
 		return id;
@@ -48,33 +52,52 @@ public class Mensaje implements Serializable {
 		this.hora = hora;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
+	public Usuario getUsuarioEmisor() {
+		return usuarioEmisor;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setUsuarioEmisor(Usuario usuarioEmisor) {
+		this.usuarioEmisor = usuarioEmisor;
 	}
 
-	public Mensaje(Long id, String contenido, Timestamp hora, Usuario usuario) {
+	public Usuario getUsuarioReceptor() {
+		return usuarioReceptor;
+	}
+
+	public void setUsuarioReceptor(Usuario usuarioReceptor) {
+		this.usuarioReceptor = usuarioReceptor;
+	}
+
+	public Mensaje(Long id, String contenido, Timestamp hora, Usuario usuarioEmisor, Usuario usuarioReceptor) {
 		super();
 		this.id = id;
 		this.contenido = contenido;
 		this.hora = hora;
-		this.usuario = usuario;
+		this.usuarioEmisor = usuarioEmisor;
+		this.usuarioReceptor = usuarioReceptor;
 	}
 
-	public Mensaje(String contenido, Timestamp hora, Usuario usuario) {
+	public Mensaje(String contenido, Timestamp hora, Usuario usuarioEmisor, Usuario usuarioReceptor) {
 		super();
 		this.contenido = contenido;
 		this.hora = hora;
-		this.usuario = usuario;
+		this.usuarioEmisor = usuarioEmisor;
+		this.usuarioReceptor = usuarioReceptor;
+	}
+
+	public Mensaje() {
+		super();
 	}
 
 	@Override
 	public String toString() {
-		return "Mensaje [id=" + id + ", contenido=" + contenido + ", hora=" + hora + ", usuario=" + usuario + "]";
+		return "Mensaje [id=" + id + ", contenido=" + contenido + ", hora=" + hora + ", usuarioEmisor=" + usuarioEmisor
+				+ ", usuarioReceptor=" + usuarioReceptor + "]";
 	}
+
+
+
+	
 	
 	
 	

@@ -30,11 +30,17 @@ public class Usuario implements Serializable {
     @OneToMany(mappedBy="usuario")
     private Set<Articulo> articulos;
     
-    @OneToMany(mappedBy="usuario")
-    private Set<Valoracion> valoraciones;
+    @OneToMany(mappedBy="usuarioEmisor")
+    private Set<Valoracion> valoracionesEmisor;
     
-    @OneToMany(mappedBy="usuario")
-    private Set<Mensaje> mensajes;
+    @OneToMany(mappedBy="usuarioReceptor")
+    private Set<Valoracion> valoracionesReceptor;
+    
+    @OneToMany(mappedBy="usuarioEmisor")
+    private Set<Mensaje> mensajesEmisor;
+    
+    @OneToMany(mappedBy="usuarioReceptor")
+    private Set<Mensaje> mensajesReceptor;
 
 	public Long getId() {
 		return id;
@@ -92,24 +98,58 @@ public class Usuario implements Serializable {
 		this.articulos = articulos;
 	}
 
-	public Set<Valoracion> getValoraciones() {
-		return valoraciones;
+	public Set<Valoracion> getValoracionesEmisor() {
+		return valoracionesEmisor;
 	}
 
-	public void setValoraciones(Set<Valoracion> valoraciones) {
-		this.valoraciones = valoraciones;
+	public void setValoracionesEmisor(Set<Valoracion> valoracionesEmisor) {
+		this.valoracionesEmisor = valoracionesEmisor;
 	}
 
-	public Set<Mensaje> getMensajes() {
-		return mensajes;
+	public Set<Valoracion> getValoracionesReceptor() {
+		return valoracionesReceptor;
 	}
 
-	public void setMensajes(Set<Mensaje> mensajes) {
-		this.mensajes = mensajes;
+	public void setValoracionesReceptor(Set<Valoracion> valoracionesReceptor) {
+		this.valoracionesReceptor = valoracionesReceptor;
+	}
+
+	public Set<Mensaje> getMensajesEmisor() {
+		return mensajesEmisor;
+	}
+	
+	public void setMensajesEmisor(Set<Mensaje> mensajesEmisor) {
+		this.mensajesEmisor = mensajesEmisor;
+	}
+
+	public void setMensajesReceptor(Set<Mensaje> mensajesReceptor) {
+		this.mensajesReceptor = mensajesReceptor;
+	}
+
+	public Set<Mensaje> getMensajesReceptor() {
+		return mensajesReceptor;
+	}
+
+	
+	public Usuario(String nombre, String apellidos, String ubicacion, String contrasenya, String avatar,
+			Set<Articulo> articulos, Set<Valoracion> valoracionesEmisor, Set<Valoracion> valoracionesReceptor,
+			Set<Mensaje> mensajesEmisor, Set<Mensaje> mensajesReceptor) {
+		super();
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+		this.ubicacion = ubicacion;
+		this.contrasenya = contrasenya;
+		this.avatar = avatar;
+		this.articulos = articulos;
+		this.valoracionesEmisor = valoracionesEmisor;
+		this.valoracionesReceptor = valoracionesReceptor;
+		this.mensajesEmisor = mensajesEmisor;
+		this.mensajesReceptor = mensajesReceptor;
 	}
 
 	public Usuario(Long id, String nombre, String apellidos, String ubicacion, String contrasenya, String avatar,
-			Set<Articulo> articulos, Set<Valoracion> valoraciones, Set<Mensaje> mensajes) {
+			Set<Articulo> articulos, Set<Valoracion> valoracionesEmisor, Set<Valoracion> valoracionesReceptor,
+			Set<Mensaje> mensajesEmisor, Set<Mensaje> mensajesReceptor) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -118,29 +158,27 @@ public class Usuario implements Serializable {
 		this.contrasenya = contrasenya;
 		this.avatar = avatar;
 		this.articulos = articulos;
-		this.valoraciones = valoraciones;
-		this.mensajes = mensajes;
+		this.valoracionesEmisor = valoracionesEmisor;
+		this.valoracionesReceptor = valoracionesReceptor;
+		this.mensajesEmisor = mensajesEmisor;
+		this.mensajesReceptor = mensajesReceptor;
 	}
 
-	public Usuario(String nombre, String apellidos, String ubicacion, String contrasenya, String avatar,
-			Set<Articulo> articulos, Set<Valoracion> valoraciones, Set<Mensaje> mensajes) {
+	public Usuario() {
 		super();
-		this.nombre = nombre;
-		this.apellidos = apellidos;
-		this.ubicacion = ubicacion;
-		this.contrasenya = contrasenya;
-		this.avatar = avatar;
-		this.articulos = articulos;
-		this.valoraciones = valoraciones;
-		this.mensajes = mensajes;
 	}
 
 	@Override
 	public String toString() {
 		return "Usuario [id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", ubicacion=" + ubicacion
-				+ ", contrasenya=" + contrasenya + ", avatar=" + avatar + ", articulos=" + articulos + ", valoraciones="
-				+ valoraciones + ", mensajes=" + mensajes + "]";
+				+ ", contrasenya=" + contrasenya + ", avatar=" + avatar + ", articulos=" + articulos
+				+ ", valoracionesEmisor=" + valoracionesEmisor + ", valoracionesReceptor=" + valoracionesReceptor
+				+ ", mensajesEmisor=" + mensajesEmisor + ", mensajesReceptor=" + mensajesReceptor + "]";
 	}
+
+	
+
+
     
     
     
