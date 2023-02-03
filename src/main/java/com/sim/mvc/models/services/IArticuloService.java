@@ -14,7 +14,9 @@ public interface IArticuloService {
 	
 	public void delete(Long id);
 	
-	public List<Articulo> findByUsuarioId(Long id);
+	public List<Articulo> findByUsuarioVendedorId(Long id);
+	
+	public List<Articulo> findByUsuarioCompradorId(Long id);
 	
 	public List<Articulo> findByCategoriaId(Long id);
 	
@@ -22,7 +24,7 @@ public interface IArticuloService {
 	
 	public List<Articulo> findAllOrderByHigherPrecio();
 	
-	public Articulo findByTitulo(String titulo);
+	public List<Articulo> findByTitulo(String titulo);
 	
 	public Articulo update(Articulo articulo);
 }

@@ -27,12 +27,19 @@ public class Articulo implements Serializable {
 	@Column(name="estado")
 	private String estado;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
-	@JoinColumn(name = "usuario_id", nullable = true)
-	private Usuario usuario;
+	@Column(name="vendido")
+	private boolean vendido = false;
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = true)
-	@JoinColumn(name = "categorai_id", nullable = true)
+	@JoinColumn(name = "usuario_vendedor", nullable = true)
+	private Usuario usuarioVendedor;
+	
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@JoinColumn(name = "usuario_comprador", nullable = true)
+	private Usuario usuarioComprador;
+	
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@JoinColumn(name = "categoria", nullable = true)
 	private Categoria categoria;
 
     @OneToMany(mappedBy="articulo")
@@ -86,14 +93,6 @@ public class Articulo implements Serializable {
 		this.estado = estado;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
 	public Categoria getCategoria() {
 		return categoria;
 	}
@@ -110,74 +109,63 @@ public class Articulo implements Serializable {
 		this.fotos = fotos;
 	}
 
-//	TODOS LOS ATRIBUTOS
-	public Articulo(Long id, String titulo, int likes, String descripcion, float precio, String estado, Usuario usuario,
-			Categoria categoria, Set<Foto> fotos) {
-		super();
-		this.id = id;
-		this.titulo = titulo;
-		this.likes = likes;
-		this.descripcion = descripcion;
-		this.precio = precio;
-		this.estado = estado;
-		this.usuario = usuario;
-		this.categoria = categoria;
-		this.fotos = fotos;
+	public Usuario getUsuarioVendedor() {
+		return usuarioVendedor;
 	}
 
-//	TODOS LOS CAMPOS MENOS ID
-	public Articulo(String titulo, int likes, String descripcion, float precio, String estado, Usuario usuario,
-			Categoria categoria, Set<Foto> fotos) {
-		super();
-		this.titulo = titulo;
-		this.likes = likes;
-		this.descripcion = descripcion;
-		this.precio = precio;
-		this.estado = estado;
-		this.usuario = usuario;
-		this.categoria = categoria;
-		this.fotos = fotos;
+	public void setUsuarioVendedor(Usuario usuarioVendedor) {
+		this.usuarioVendedor = usuarioVendedor;
 	}
 
-//	TODOS LOS CAMPOS MENOS LIKES
-	public Articulo(Long id, String titulo, String descripcion, float precio, String estado, Usuario usuario,
-			Categoria categoria, Set<Foto> fotos) {
-		super();
-		this.id = id;
-		this.titulo = titulo;
-		this.descripcion = descripcion;
-		this.precio = precio;
-		this.estado = estado;
-		this.usuario = usuario;
-		this.categoria = categoria;
-		this.fotos = fotos;
+	public Usuario getUsuarioComprador() {
+		return usuarioComprador;
+	}
+
+	public void setUsuarioComprador(Usuario usuarioComprador) {
+		this.usuarioComprador = usuarioComprador;
 	}
 	
+	public boolean getVendido() {
+		return vendido;
+	}
 
-	public Articulo(String titulo, String descripcion, float precio, String estado, Usuario usuario, Categoria categoria,
-		Set<Foto> fotos) {
-	super();
-	this.titulo = titulo;
-	this.descripcion = descripcion;
-	this.precio = precio;
-	this.estado = estado;
-	this.usuario = usuario;
-	this.categoria = categoria;
-	this.fotos = fotos;
-}
+	public void setVendido(boolean vendido) {
+		this.vendido = vendido;
+	}
+	
+	
+
+
+	
+
+
+
+	public Articulo(Long id, String titulo, int likes, String descripcion, float precio, String estado, boolean vendido,
+			Usuario usuarioVendedor, Usuario usuarioComprador, Categoria categoria, Set<Foto> fotos) {
+		super();
+		this.id = id;
+		this.titulo = titulo;
+		this.likes = likes;
+		this.descripcion = descripcion;
+		this.precio = precio;
+		this.estado = estado;
+		this.vendido = vendido;
+		this.usuarioVendedor = usuarioVendedor;
+		this.usuarioComprador = usuarioComprador;
+		this.categoria = categoria;
+		this.fotos = fotos;
+	}
 
 	public Articulo() {
-	super();
-}
+		super();
+	}
 
 	@Override
 	public String toString() {
 		return "Articulo [id=" + id + ", titulo=" + titulo + ", likes=" + likes + ", descripcion=" + descripcion
-				+ ", precio=" + precio + ", estado=" + estado + ", usuario=" + usuario + ", categoria=" + categoria
-				+ ", fotos=" + fotos + "]";
-	}
-    
-    
+				+ ", precio=" + precio + ", estado=" + estado + ", vendido=" + vendido + ", usuarioVendedor="
+				+ usuarioVendedor + ", usuarioComprador=" + usuarioComprador + ", categoria=" + categoria + ", fotos="
+				+ fotos + "]";
+	}	
 	
-
 }

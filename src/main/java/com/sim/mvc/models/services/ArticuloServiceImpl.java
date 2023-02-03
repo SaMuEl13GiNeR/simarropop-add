@@ -44,8 +44,14 @@ public class ArticuloServiceImpl implements IArticuloService{
 
 	@Override
 	@Transactional
-	public List<Articulo> findByUsuarioId(Long id) {
-		return articuloDao.findByUsuarioId(id);
+	public List<Articulo> findByUsuarioVendedorId(Long id) {
+		return articuloDao.findByUsuarioVendedorId(id);
+	}
+	
+	@Override
+	@Transactional
+	public List<Articulo> findByUsuarioCompradorId(Long id) {
+		return articuloDao.findByUsuarioCompradorId(id);
 	}
 
 	@Override
@@ -64,7 +70,7 @@ public class ArticuloServiceImpl implements IArticuloService{
 	}
 
 	@Override
-	public Articulo findByTitulo(String titulo) {
+	public List<Articulo> findByTitulo(String titulo) {
 		return articuloDao.findByTitulo(titulo);
 	}
 

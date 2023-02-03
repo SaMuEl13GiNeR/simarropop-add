@@ -6,13 +6,13 @@ import java.util.Set;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="usuario")
+@Table(name="res.partner")
 public class Usuario implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="nombre")
+	@Column(name="name")
 	private String nombre;
 	
 	@Column(name="apellidos")
@@ -24,11 +24,20 @@ public class Usuario implements Serializable {
 	@Column(name="contrasenya")
 	private String contrasenya;
 	
-	@Column(name="avatar")
-	private String avatar;
+	@Column(name="correo")
+	private String correo;
 	
-    @OneToMany(mappedBy="usuario")
-    private Set<Articulo> articulos;
+//	@Column(name="avatar")
+//	private String avatar;
+	
+	@Column(name="is_user")
+	private boolean isUser;
+	
+    @OneToMany(mappedBy="usuarioComprador")
+    private Set<Articulo> articulosComprados;
+   
+    @OneToMany(mappedBy="usuarioVendedor")
+    private Set<Articulo> articulosVendidos;
     
     @OneToMany(mappedBy="usuarioEmisor")
     private Set<Valoracion> valoracionesEmisor;
@@ -81,21 +90,46 @@ public class Usuario implements Serializable {
 	public void setContrasenya(String contrasenya) {
 		this.contrasenya = contrasenya;
 	}
-
-	public String getAvatar() {
-		return avatar;
+	
+	public boolean getUser() {
+		return isUser;
 	}
 
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
+	public void setUser(boolean isUser) {
+		this.isUser = isUser;
+	}
+	
+
+//	public String getAvatar() {
+//		return avatar;
+//	}
+//
+//	public void setAvatar(String avatar) {
+//		this.avatar = avatar;
+//	}
+
+	public String getCorreo() {
+		return correo;
 	}
 
-	public Set<Articulo> getArticulos() {
-		return articulos;
+	public void setCorreo(String correo) {
+		this.correo = correo;
 	}
 
-	public void setArticulos(Set<Articulo> articulos) {
-		this.articulos = articulos;
+	public Set<Articulo> getArticulosComprados() {
+		return articulosComprados;
+	}
+
+	public void setArticulosComprados(Set<Articulo> articulosComprados) {
+		this.articulosComprados = articulosComprados;
+	}
+
+	public Set<Articulo> getArticulosVendidos() {
+		return articulosVendidos;
+	}
+
+	public void setArticulosVendidos(Set<Articulo> articulosVendidos) {
+		this.articulosVendidos = articulosVendidos;
 	}
 
 	public Set<Valoracion> getValoracionesEmisor() {
@@ -130,51 +164,44 @@ public class Usuario implements Serializable {
 		return mensajesReceptor;
 	}
 
-	
-	public Usuario(String nombre, String apellidos, String ubicacion, String contrasenya, String avatar,
-			Set<Articulo> articulos, Set<Valoracion> valoracionesEmisor, Set<Valoracion> valoracionesReceptor,
-			Set<Mensaje> mensajesEmisor, Set<Mensaje> mensajesReceptor) {
+	public Usuario() {
 		super();
-		this.nombre = nombre;
-		this.apellidos = apellidos;
-		this.ubicacion = ubicacion;
-		this.contrasenya = contrasenya;
-		this.avatar = avatar;
-		this.articulos = articulos;
-		this.valoracionesEmisor = valoracionesEmisor;
-		this.valoracionesReceptor = valoracionesReceptor;
-		this.mensajesEmisor = mensajesEmisor;
-		this.mensajesReceptor = mensajesReceptor;
 	}
 
-	public Usuario(Long id, String nombre, String apellidos, String ubicacion, String contrasenya, String avatar,
-			Set<Articulo> articulos, Set<Valoracion> valoracionesEmisor, Set<Valoracion> valoracionesReceptor,
-			Set<Mensaje> mensajesEmisor, Set<Mensaje> mensajesReceptor) {
+
+
+	public Usuario(Long id, String nombre, String apellidos, String ubicacion, String contrasenya, String correo,
+			boolean isUser, Set<Articulo> articulosComprados, Set<Articulo> articulosVendidos,
+			Set<Valoracion> valoracionesEmisor, Set<Valoracion> valoracionesReceptor, Set<Mensaje> mensajesEmisor,
+			Set<Mensaje> mensajesReceptor) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.ubicacion = ubicacion;
 		this.contrasenya = contrasenya;
-		this.avatar = avatar;
-		this.articulos = articulos;
+		this.correo = correo;
+		this.isUser = isUser;
+		this.articulosComprados = articulosComprados;
+		this.articulosVendidos = articulosVendidos;
 		this.valoracionesEmisor = valoracionesEmisor;
 		this.valoracionesReceptor = valoracionesReceptor;
 		this.mensajesEmisor = mensajesEmisor;
 		this.mensajesReceptor = mensajesReceptor;
 	}
 
-	public Usuario() {
-		super();
-	}
-
 	@Override
 	public String toString() {
 		return "Usuario [id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", ubicacion=" + ubicacion
-				+ ", contrasenya=" + contrasenya + ", avatar=" + avatar + ", articulos=" + articulos
-				+ ", valoracionesEmisor=" + valoracionesEmisor + ", valoracionesReceptor=" + valoracionesReceptor
-				+ ", mensajesEmisor=" + mensajesEmisor + ", mensajesReceptor=" + mensajesReceptor + "]";
+				+ ", contrasenya=" + contrasenya + ", correo=" + correo + ", articulosComprados=" + articulosComprados
+				+ ", articulosVendidos=" + articulosVendidos + ", valoracionesEmisor=" + valoracionesEmisor
+				+ ", valoracionesReceptor=" + valoracionesReceptor + ", mensajesEmisor=" + mensajesEmisor
+				+ ", mensajesReceptor=" + mensajesReceptor + "]";
 	}
+
+
+
+
 
 	
 

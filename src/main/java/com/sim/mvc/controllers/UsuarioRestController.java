@@ -1,5 +1,5 @@
 package com.sim.mvc.controllers;
-import java.util.Date;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,52 +19,53 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sim.mvc.models.entity.Articulo;
-import com.sim.mvc.models.services.IArticuloService;
+import com.sim.mvc.models.entity.Usuario;
+import com.sim.mvc.models.services.IUsuarioService;
 
 @CrossOrigin(origins = { "http://192.168.8.226:4200" })
 @RestController
 @RequestMapping("/simarropop")
-public class ArticuloRestController {
+public class UsuarioRestController {
+	
 
 	@Autowired
-	@Qualifier("ArticuloServiceImpl")
-	private IArticuloService articuloService;
-
-	@GetMapping("/articulos")
-	public List<Articulo> findAll() {
-		return articuloService.findAll();
+	@Qualifier("UsuarioServiceImpl")
+	private IUsuarioService usuarioService;
+	
+	@GetMapping("/usuarios")
+	public List<Usuario> findAll() {
+		return usuarioService.findAll();
 	}
 	
-	@GetMapping("/articulo/{id}")
+	@GetMapping("/usuario/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id) {
 		
-		Articulo articulo = null;
+		Usuario usuario = null;
 		Map<String, Object> response = new HashMap<>();
 		
 		try {
-			articulo = articuloService.findById(id);
+			usuario = usuarioService.findById(id);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar la consulta en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		if(articulo == null) {
-			response.put("mensaje", "El articulo ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
+		if(usuario == null) {
+			response.put("mensaje", "El usuario ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<Articulo>(articulo, HttpStatus.OK);
+		return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
 	}
 	
-	@PostMapping("/articulo/nuevo")
-	public ResponseEntity<?> create(@RequestBody Articulo articulo, BindingResult result) {
+	@PostMapping("/usuario/nuevo")
+	public ResponseEntity<?> create(@RequestBody Usuario usuario, BindingResult result) {
 		
-		Articulo articuloNew = null;
+		Usuario usuarioNew = null;
 		Map<String, Object> response = new HashMap<>();
 		
 		if(result.hasErrors()) {
@@ -79,43 +80,43 @@ public class ArticuloRestController {
 		}
 		
 		try {
-			articuloNew = articuloService.save(articulo);
+			usuarioNew = usuarioService.save(usuario);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar el insert en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "El articulo ha sido creado con éxito!");
-		response.put("articulo", articuloNew);
+		response.put("mensaje", "El usuario ha sido creado con éxito!");
+		response.put("usuario", usuarioNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
-	@DeleteMapping("/articulo/{id}")
+	@DeleteMapping("/usuario/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		
 		Map<String, Object> response = new HashMap<>();
 		
 		try {
-			articuloService.delete(id);
+			usuarioService.delete(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al eliminar el articulo de la base de datos");
+			response.put("mensaje", "Error al eliminar el usuario de la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "Articulo eliminado con éxito!");
+		response.put("mensaje", "Usuario eliminado con éxito!");
 		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	
 	
-	@PutMapping("/articulo/{id}")
-	public ResponseEntity<?> update(@RequestBody Articulo articulo, BindingResult result, @PathVariable Long id) {
+	@PutMapping("/usuario/{id}")
+	public ResponseEntity<?> update(@RequestBody Usuario usuario, BindingResult result, @PathVariable Long id) {
 
-		Articulo articuloActual = articuloService.findById(id);
+		Usuario usuarioActual = usuarioService.findById(id);
 
-		Articulo articuloUpdated = null;
+		Usuario usuarioUpdated = null;
 
 		Map<String, Object> response = new HashMap<>();
 		
@@ -130,63 +131,44 @@ public class ArticuloRestController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		
-		if (articuloActual == null) {
-			response.put("mensaje", "Error: no se pudo editar, el articulo ID: "
+		if (usuarioActual == null) {
+			response.put("mensaje", "Error: no se pudo editar, el usuario ID: "
 					.concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 
 		try {
 
-			articuloActual.setTitulo(articulo.getTitulo());
-			articuloActual.setLikes(articulo.getLikes());
-			articuloActual.setDescripcion(articulo.getDescripcion());
-			articuloActual.setPrecio(articulo.getPrecio());
-			articuloActual.setEstado(articulo.getEstado());
-			articuloActual.setUsuarioComprador(articulo.getUsuarioComprador());
-			articuloActual.setUsuarioVendedor(articulo.getUsuarioVendedor());
-			articuloActual.setVendido(articulo.getVendido());
-			articuloActual.setCategoria(articulo.getCategoria());
-			articuloActual.setFotos(articulo.getFotos());
+			usuarioActual.setNombre(usuario.getNombre());
+			usuarioActual.setApellidos(usuario.getApellidos());
+			usuarioActual.setUbicacion(usuario.getUbicacion());
+			usuarioActual.setContrasenya(usuario.getContrasenya());
+//			usuarioActual.setAvatar(usuario.getAvatar());
+			usuarioActual.setArticulosComprados(usuario.getArticulosComprados());
+			usuarioActual.setArticulosVendidos(usuario.getArticulosVendidos());
+			usuarioActual.setValoracionesEmisor(usuario.getValoracionesEmisor());
+			usuarioActual.setValoracionesReceptor(usuario.getValoracionesReceptor());
+			usuarioActual.setMensajesEmisor(usuario.getMensajesEmisor());
+			usuarioActual.setMensajesReceptor(usuario.getMensajesReceptor());
+			usuarioActual.setUser(usuario.getUser());
 
-
-			articuloUpdated = articuloService.save(articuloActual);
+			usuarioUpdated = usuarioService.save(usuarioActual);
 
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al actualizar el articulo en la base de datos");
+			response.put("mensaje", "Error al actualizar el usuario en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		response.put("mensaje", "El articulo ha sido actualizado con éxito!");
-		response.put("articulo", articuloUpdated);
+		response.put("mensaje", "El usuario ha sido actualizado con éxito!");
+		response.put("usuario", usuarioUpdated);
 
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/articulos/usuario/{id}")
-	public List<Articulo> findByUsuarioId(@PathVariable Long id){
-		return articuloService.findByUsuarioVendedorId(id);
+	@GetMapping("/usuario/nombre/{nombre}")
+	public List<Usuario> findByNombre(@PathVariable String nombre) {
+		return usuarioService.findByNombre(nombre);
 	}
 
-	@GetMapping("/articulos/categoria/{id}")
-	public List<Articulo> findByCategoriaId(@PathVariable Long id){
-		return articuloService.findByCategoriaId(id);
-	}
-	
-	@GetMapping("/articulos/precio/lower")
-	public List<Articulo> findAllOrderByLowerPrecio(){
-		return articuloService.findAllOrderByLowerPrecio();
-	}
-	
-	@GetMapping("/articulos/precio/higher")
-	public List<Articulo> findAllOrderByHigherPrecio(){
-		return articuloService.findAllOrderByHigherPrecio();
-	}
-	
-	@GetMapping("/articulo/titulo/{titulo}")
-	public List<Articulo> findByTitulo(@PathVariable String titulo) {
-		return articuloService.findByTitulo(titulo);
-	}
-	
 }
