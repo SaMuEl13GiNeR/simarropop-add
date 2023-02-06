@@ -3,6 +3,8 @@ package com.sim.mvc.models.entity;
 import java.io.Serializable;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -18,12 +20,14 @@ public class Valoracion implements Serializable {
 	@Column(name="opinion")
 	private String opinion;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "usuario_id_emisor", nullable = false)
+	@ManyToOne
+	@JsonManagedReference
+	@JoinColumn(name = "usuario_emisor", nullable = false)
 	private Usuario usuarioEmisor;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "usuario_id_receptor", nullable = false)
+	@ManyToOne
+	@JsonManagedReference
+	@JoinColumn(name = "usuario_receptor", nullable = false)
 	private Usuario usuarioReceptor;
 
 	public Long getId() {

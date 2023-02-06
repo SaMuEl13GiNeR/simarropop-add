@@ -2,11 +2,12 @@ package com.sim.mvc.models.entity;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 	
 @Entity
-@Table(name="simarropop_articulo")
+@Table(name="sale_order")
 public class Articulo implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -15,7 +16,7 @@ public class Articulo implements Serializable {
 	@Column(nullable=false)
 	private String titulo;
 	
-	@Column(name="likes")
+	@Column(name="likes", nullable = true)
 	private int likes; 
 	
 	@Column(name="descripcion")
@@ -30,15 +31,18 @@ public class Articulo implements Serializable {
 	@Column(name="vendido")
 	private boolean vendido = false;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@ManyToOne
+	@JsonManagedReference
 	@JoinColumn(name = "usuario_vendedor", nullable = true)
 	private Usuario usuarioVendedor;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@ManyToOne
+	@JsonManagedReference
 	@JoinColumn(name = "usuario_comprador", nullable = true)
 	private Usuario usuarioComprador;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@ManyToOne
+	@JsonManagedReference
 	@JoinColumn(name = "categoria", nullable = true)
 	private Categoria categoria;
 

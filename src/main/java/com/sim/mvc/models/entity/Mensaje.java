@@ -2,8 +2,8 @@ package com.sim.mvc.models.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 
@@ -20,12 +20,14 @@ public class Mensaje implements Serializable {
 	@Column(name="hora")
 	private java.sql.Timestamp hora;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "usuario_id_emisor", nullable = false)
+	@ManyToOne
+	@JsonManagedReference
+	@JoinColumn(name = "usuario_emisor", nullable = false)
 	private Usuario usuarioEmisor;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "usuario_id_receptor", nullable = false)
+	@ManyToOne
+	@JsonManagedReference
+	@JoinColumn(name = "usuario_receptor", nullable = false)
 	private Usuario usuarioReceptor;
 
 	public Long getId() {

@@ -1,10 +1,14 @@
 package com.sim.mvc.models.entity;
 
 import java.io.Serializable;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="categoria")
+@Table(name="simarropop_categoria")
 public class Categoria implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -13,9 +17,9 @@ public class Categoria implements Serializable {
 	@Column(name="tipo")
 	private String tipo;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "articulo_id", nullable = false)
-	private Articulo articulo;
+	@OneToMany(mappedBy="categoria")
+	@JsonBackReference
+	private Set<Articulo> articulos;
 
 	public Long getId() {
 		return id;
@@ -33,31 +37,34 @@ public class Categoria implements Serializable {
 		this.tipo = tipo;
 	}
 
-	public Articulo getArticulo() {
-		return articulo;
+	
+
+	public Set<Articulo> getArticulos() {
+		return articulos;
 	}
 
-	public void setArticulo(Articulo articulo) {
-		this.articulo = articulo;
+	public void setArticulos(Set<Articulo> articulos) {
+		this.articulos = articulos;
 	}
 
-	public Categoria(Long id, String tipo, Articulo articulo) {
+	
+	public Categoria(Long id, String tipo, Set<Articulo> articulos) {
 		super();
 		this.id = id;
 		this.tipo = tipo;
-		this.articulo = articulo;
+		this.articulos = articulos;
 	}
 
-	public Categoria(String tipo, Articulo articulo) {
+	public Categoria() {
 		super();
-		this.tipo = tipo;
-		this.articulo = articulo;
 	}
 
 	@Override
 	public String toString() {
-		return "Categoria [id=" + id + ", tipo=" + tipo + ", articulo=" + articulo + "]";
+		return "Categoria [id=" + id + ", tipo=" + tipo + ", articulos=" + articulos + "]";
 	}
+
+
 	
 	
 	

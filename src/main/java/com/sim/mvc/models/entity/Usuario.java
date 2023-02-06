@@ -3,6 +3,9 @@ package com.sim.mvc.models.entity;
 import java.io.Serializable;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -34,21 +37,27 @@ public class Usuario implements Serializable {
 	private boolean isUser;
 	
     @OneToMany(mappedBy="usuarioComprador")
+    @JsonBackReference
     private Set<Articulo> articulosComprados;
    
     @OneToMany(mappedBy="usuarioVendedor")
+    @JsonBackReference
     private Set<Articulo> articulosVendidos;
     
     @OneToMany(mappedBy="usuarioEmisor")
+    @JsonBackReference
     private Set<Valoracion> valoracionesEmisor;
     
     @OneToMany(mappedBy="usuarioReceptor")
+    @JsonBackReference
     private Set<Valoracion> valoracionesReceptor;
     
     @OneToMany(mappedBy="usuarioEmisor")
+    @JsonBackReference
     private Set<Mensaje> mensajesEmisor;
     
     @OneToMany(mappedBy="usuarioReceptor")
+    @JsonBackReference
     private Set<Mensaje> mensajesReceptor;
 
 	public Long getId() {

@@ -1,5 +1,4 @@
 package com.sim.mvc.controllers;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sim.mvc.models.entity.Articulo;
@@ -110,7 +109,7 @@ public class ArticuloRestController {
 	}
 	
 	
-	@PutMapping("/articulo/{id}")
+	@PutMapping(value= "/articulo/{id}", consumes={"application/json"})
 	public ResponseEntity<?> update(@RequestBody Articulo articulo, BindingResult result, @PathVariable Long id) {
 
 		Articulo articuloActual = articuloService.findById(id);
@@ -184,7 +183,7 @@ public class ArticuloRestController {
 		return articuloService.findAllOrderByHigherPrecio();
 	}
 	
-	@GetMapping("/articulo/titulo/{titulo}")
+	@GetMapping("/articulos/titulo/{titulo}")
 	public List<Articulo> findByTitulo(@PathVariable String titulo) {
 		return articuloService.findByTitulo(titulo);
 	}

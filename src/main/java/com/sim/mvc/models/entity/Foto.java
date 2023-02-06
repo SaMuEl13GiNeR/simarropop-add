@@ -1,6 +1,9 @@
 package com.sim.mvc.models.entity;
 
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -13,7 +16,8 @@ public class Foto implements Serializable {
 	@Column(name= "imagen")
 	private String imagen;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne
+	@JsonManagedReference
 	@JoinColumn(name = "articulo_id", nullable = false)
 	private Articulo articulo;
 
