@@ -4,11 +4,15 @@ import java.io.Serializable;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name="simarropop_categoria")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Categoria implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -18,7 +22,7 @@ public class Categoria implements Serializable {
 	private String tipo;
 	
 	@OneToMany(mappedBy="categoria")
-	@JsonBackReference
+    @JsonBackReference(value="articulos")
 	private Set<Articulo> articulos;
 
 	public Long getId() {

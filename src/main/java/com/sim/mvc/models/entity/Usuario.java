@@ -4,12 +4,15 @@ import java.io.Serializable;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name="res.partner")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Usuario implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -37,27 +40,27 @@ public class Usuario implements Serializable {
 	private boolean isUser;
 	
     @OneToMany(mappedBy="usuarioComprador")
-    @JsonBackReference
+    @JsonBackReference(value="articulosComprados")
     private Set<Articulo> articulosComprados;
    
     @OneToMany(mappedBy="usuarioVendedor")
-    @JsonBackReference
+    @JsonBackReference(value="articulosVendidos")
     private Set<Articulo> articulosVendidos;
     
     @OneToMany(mappedBy="usuarioEmisor")
-    @JsonBackReference
+    @JsonBackReference(value="valoracionesEmisor")
     private Set<Valoracion> valoracionesEmisor;
     
     @OneToMany(mappedBy="usuarioReceptor")
-    @JsonBackReference
+    @JsonBackReference(value="valoracionesReceptor")
     private Set<Valoracion> valoracionesReceptor;
     
     @OneToMany(mappedBy="usuarioEmisor")
-    @JsonBackReference
+    @JsonBackReference(value="mensajesEmisor")
     private Set<Mensaje> mensajesEmisor;
     
     @OneToMany(mappedBy="usuarioReceptor")
-    @JsonBackReference
+    @JsonBackReference(value="mensajesReceptor")
     private Set<Mensaje> mensajesReceptor;
 
 	public Long getId() {

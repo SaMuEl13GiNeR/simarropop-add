@@ -4,10 +4,13 @@ import java.io.Serializable;
 import jakarta.persistence.*;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 	
 @Entity
 @Table(name="sale_order")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Articulo implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -32,17 +35,14 @@ public class Articulo implements Serializable {
 	private boolean vendido = false;
 	
 	@ManyToOne
-	@JsonManagedReference
 	@JoinColumn(name = "usuario_vendedor", nullable = true)
 	private Usuario usuarioVendedor;
 	
 	@ManyToOne
-	@JsonManagedReference
 	@JoinColumn(name = "usuario_comprador", nullable = true)
 	private Usuario usuarioComprador;
 	
 	@ManyToOne
-	@JsonManagedReference
 	@JoinColumn(name = "categoria", nullable = true)
 	private Categoria categoria;
 
