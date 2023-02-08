@@ -3,14 +3,9 @@ package com.sim.mvc.models.entity;
 import java.io.Serializable;
 import jakarta.persistence.*;
 import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 	
 @Entity
 @Table(name="sale_order")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Articulo implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -46,8 +41,8 @@ public class Articulo implements Serializable {
 	@JoinColumn(name = "categoria", nullable = true)
 	private Categoria categoria;
 
-    @OneToMany(mappedBy="articulo")
-    private Set<Foto> fotos;
+//    @OneToMany(mappedBy="articulo")
+//    private Set<Foto> fotos;
 
 	public Long getId() {
 		return id;
@@ -105,13 +100,13 @@ public class Articulo implements Serializable {
 		this.categoria = categoria;
 	}
 
-	public Set<Foto> getFotos() {
-		return fotos;
-	}
-
-	public void setFotos(Set<Foto> fotos) {
-		this.fotos = fotos;
-	}
+//	public Set<Foto> getFotos() {
+//		return fotos;
+//	}
+//
+//	public void setFotos(Set<Foto> fotos) {
+//		this.fotos = fotos;
+//	}
 
 	public Usuario getUsuarioVendedor() {
 		return usuarioVendedor;
@@ -145,7 +140,7 @@ public class Articulo implements Serializable {
 
 
 	public Articulo(Long id, String titulo, int likes, String descripcion, float precio, String estado, boolean vendido,
-			Usuario usuarioVendedor, Usuario usuarioComprador, Categoria categoria, Set<Foto> fotos) {
+			Usuario usuarioVendedor, Usuario usuarioComprador, Categoria categoria) {
 		super();
 		this.id = id;
 		this.titulo = titulo;
@@ -157,7 +152,7 @@ public class Articulo implements Serializable {
 		this.usuarioVendedor = usuarioVendedor;
 		this.usuarioComprador = usuarioComprador;
 		this.categoria = categoria;
-		this.fotos = fotos;
+
 	}
 
 	public Articulo() {
@@ -168,8 +163,7 @@ public class Articulo implements Serializable {
 	public String toString() {
 		return "Articulo [id=" + id + ", titulo=" + titulo + ", likes=" + likes + ", descripcion=" + descripcion
 				+ ", precio=" + precio + ", estado=" + estado + ", vendido=" + vendido + ", usuarioVendedor="
-				+ usuarioVendedor + ", usuarioComprador=" + usuarioComprador + ", categoria=" + categoria + ", fotos="
-				+ fotos + "]";
+				+ usuarioVendedor + ", usuarioComprador=" + usuarioComprador + ", categoria=" + categoria + "]";
 	}	
 	
 }

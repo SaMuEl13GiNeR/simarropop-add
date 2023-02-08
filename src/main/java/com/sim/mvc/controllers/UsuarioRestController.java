@@ -143,12 +143,12 @@ public class UsuarioRestController {
 			usuarioActual.setUbicacion(usuario.getUbicacion());
 			usuarioActual.setContrasenya(usuario.getContrasenya());
 //			usuarioActual.setAvatar(usuario.getAvatar());
-			usuarioActual.setArticulosComprados(usuario.getArticulosComprados());
-			usuarioActual.setArticulosVendidos(usuario.getArticulosVendidos());
-			usuarioActual.setValoracionesEmisor(usuario.getValoracionesEmisor());
-			usuarioActual.setValoracionesReceptor(usuario.getValoracionesReceptor());
-			usuarioActual.setMensajesEmisor(usuario.getMensajesEmisor());
-			usuarioActual.setMensajesReceptor(usuario.getMensajesReceptor());
+//			usuarioActual.setArticulosComprados(usuario.getArticulosComprados());
+//			usuarioActual.setArticulosVendidos(usuario.getArticulosVendidos());
+//			usuarioActual.setValoracionesEmisor(usuario.getValoracionesEmisor());
+//			usuarioActual.setValoracionesReceptor(usuario.getValoracionesReceptor());
+//			usuarioActual.setMensajesEmisor(usuario.getMensajesEmisor());
+//			usuarioActual.setMensajesReceptor(usuario.getMensajesReceptor());
 			usuarioActual.setUser(usuario.getUser());
 
 			usuarioUpdated = usuarioService.save(usuarioActual);

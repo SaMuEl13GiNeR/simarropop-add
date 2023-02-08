@@ -136,7 +136,36 @@ public class ArticuloRestController {
 		}
 
 		try {
-
+//			if( articulo.getTitulo() != null) {
+//				articuloActual.setTitulo(articulo.getTitulo());
+//			}
+//			if( articulo.getLikes() != 0) {
+//				articuloActual.setLikes(articulo.getLikes());
+//			}
+//			if( articulo.getDescripcion() != null) {
+//				articuloActual.setDescripcion(articulo.getDescripcion());
+//			}
+//			if( articulo.getPrecio() != 0) {
+//				articuloActual.setPrecio(articulo.getPrecio());
+//			}
+//			if( articulo.getEstado() != null) {
+//				articuloActual.setEstado(articulo.getEstado());
+//			}
+//			if( articulo.getUsuarioComprador() != null) {
+//				articuloActual.setUsuarioComprador(articulo.getUsuarioComprador());
+//			}
+//			if( articulo.getUsuarioVendedor() != null) {
+//				articuloActual.setUsuarioVendedor(articulo.getUsuarioVendedor());
+//			}
+//			if( articulo.getVendido() != false) {
+//				articuloActual.setVendido(articulo.getVendido());
+//			}
+//			if( articulo.getCategoria() != null) {
+//				articuloActual.setCategoria(articulo.getCategoria());
+//			}
+//			if( articulo.getFotos() != null) {
+//				articuloActual.setFotos(articulo.getFotos());
+//			}
 			articuloActual.setTitulo(articulo.getTitulo());
 			articuloActual.setLikes(articulo.getLikes());
 			articuloActual.setDescripcion(articulo.getDescripcion());
@@ -146,7 +175,7 @@ public class ArticuloRestController {
 			articuloActual.setUsuarioVendedor(articulo.getUsuarioVendedor());
 			articuloActual.setVendido(articulo.getVendido());
 			articuloActual.setCategoria(articulo.getCategoria());
-			articuloActual.setFotos(articulo.getFotos());
+//			articuloActual.setFotos(articulo.getFotos());
 
 
 			articuloUpdated = articuloService.save(articuloActual);

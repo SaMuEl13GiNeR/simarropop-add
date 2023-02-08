@@ -11,7 +11,6 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name="valoracion")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Valoracion implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
