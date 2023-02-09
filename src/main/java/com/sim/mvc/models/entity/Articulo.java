@@ -3,6 +3,8 @@ package com.sim.mvc.models.entity;
 import java.io.Serializable;
 import jakarta.persistence.*;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 	
 @Entity
 @Table(name="sale_order")
@@ -11,10 +13,10 @@ public class Articulo implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable=false)
+	@Column(name="titulo")
 	private String titulo;
 	
-	@Column(name="likes", nullable = true)
+	@Column(name="likes")
 	private int likes; 
 	
 	@Column(name="descripcion")
@@ -41,8 +43,9 @@ public class Articulo implements Serializable {
 	@JoinColumn(name = "categoria", nullable = true)
 	private Categoria categoria;
 
-//    @OneToMany(mappedBy="articulo")
-//    private Set<Foto> fotos;
+	@JsonIgnore
+    @OneToMany(mappedBy="articulo")
+    private Set<Foto> fotos;
 
 	public Long getId() {
 		return id;
@@ -100,13 +103,13 @@ public class Articulo implements Serializable {
 		this.categoria = categoria;
 	}
 
-//	public Set<Foto> getFotos() {
-//		return fotos;
-//	}
-//
-//	public void setFotos(Set<Foto> fotos) {
-//		this.fotos = fotos;
-//	}
+	public Set<Foto> getFotos() {
+		return fotos;
+	}
+
+	public void setFotos(Set<Foto> fotos) {
+		this.fotos = fotos;
+	}
 
 	public Usuario getUsuarioVendedor() {
 		return usuarioVendedor;
@@ -132,12 +135,22 @@ public class Articulo implements Serializable {
 		this.vendido = vendido;
 	}
 	
-	
 
-
-	
-
-
+	public Articulo(Long id, String titulo, int likes, String descripcion, float precio, String estado, boolean vendido,
+			Usuario usuarioVendedor, Usuario usuarioComprador, Categoria categoria, Set<Foto> fotos) {
+		super();
+		this.id = id;
+		this.titulo = titulo;
+		this.likes = likes;
+		this.descripcion = descripcion;
+		this.precio = precio;
+		this.estado = estado;
+		this.vendido = vendido;
+		this.usuarioVendedor = usuarioVendedor;
+		this.usuarioComprador = usuarioComprador;
+		this.categoria = categoria;
+		this.fotos = fotos;
+	}
 
 	public Articulo(Long id, String titulo, int likes, String descripcion, float precio, String estado, boolean vendido,
 			Usuario usuarioVendedor, Usuario usuarioComprador, Categoria categoria) {
@@ -163,7 +176,10 @@ public class Articulo implements Serializable {
 	public String toString() {
 		return "Articulo [id=" + id + ", titulo=" + titulo + ", likes=" + likes + ", descripcion=" + descripcion
 				+ ", precio=" + precio + ", estado=" + estado + ", vendido=" + vendido + ", usuarioVendedor="
-				+ usuarioVendedor + ", usuarioComprador=" + usuarioComprador + ", categoria=" + categoria + "]";
-	}	
+				+ usuarioVendedor + ", usuarioComprador=" + usuarioComprador + ", categoria=" + categoria + ", fotos="
+				+ fotos + "]";
+	}
+
+
 	
 }

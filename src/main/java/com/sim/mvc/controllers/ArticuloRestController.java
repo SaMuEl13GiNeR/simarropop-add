@@ -37,7 +37,7 @@ public class ArticuloRestController {
 		return articuloService.findAll();
 	}
 	
-	@GetMapping("/articulo/{id}")
+	@GetMapping("/articulos/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id) {
 		
 		Articulo articulo = null;
@@ -59,7 +59,7 @@ public class ArticuloRestController {
 		return new ResponseEntity<Articulo>(articulo, HttpStatus.OK);
 	}
 	
-	@PostMapping("/articulo/nuevo")
+	@PostMapping("/articulos/nuevo")
 	public ResponseEntity<?> create(@RequestBody Articulo articulo, BindingResult result) {
 		
 		Articulo articuloNew = null;
@@ -90,7 +90,7 @@ public class ArticuloRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
-	@DeleteMapping("/articulo/{id}")
+	@DeleteMapping("/articulos/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		
 		Map<String, Object> response = new HashMap<>();
@@ -109,7 +109,7 @@ public class ArticuloRestController {
 	}
 	
 	
-	@PutMapping("/articulo/{id}")
+	@PutMapping("/articulos/{id}")
 	public ResponseEntity<?> update(@RequestBody Articulo articulo, BindingResult result, @PathVariable Long id) {
 
 		Articulo articuloActual = articuloService.findById(id);
@@ -175,7 +175,7 @@ public class ArticuloRestController {
 			articuloActual.setUsuarioVendedor(articulo.getUsuarioVendedor());
 			articuloActual.setVendido(articulo.getVendido());
 			articuloActual.setCategoria(articulo.getCategoria());
-//			articuloActual.setFotos(articulo.getFotos());
+			articuloActual.setFotos(articulo.getFotos());
 
 
 			articuloUpdated = articuloService.save(articuloActual);
@@ -192,7 +192,7 @@ public class ArticuloRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/articulos/usuario/{id}")
+	@GetMapping("/articulos/usuarioVendedor/{id}")
 	public List<Articulo> findByUsuarioId(@PathVariable Long id){
 		return articuloService.findByUsuarioVendedorId(id);
 	}
@@ -215,6 +215,21 @@ public class ArticuloRestController {
 	@GetMapping("/articulos/titulo/{titulo}")
 	public List<Articulo> findByTitulo(@PathVariable String titulo) {
 		return articuloService.findByTitulo(titulo);
+	}
+	
+	@GetMapping("/articulos/ajenos/{id}")
+	public List<Articulo> findAllAlien(@PathVariable Long id) {
+		return articuloService.findAllAlien(id);
+	}
+	
+	@GetMapping("/articulos/noVendidos/ajenos/{id}")
+	public List<Articulo> findAllAlienNoVendidos(@PathVariable Long id) {
+		return articuloService.findAllAlienNoVendidos(id);
+	}
+	
+	@GetMapping("/articulos/vendidos/usuario/{id}")
+	public List<Articulo> findAllVendidos(@PathVariable Long id) {
+		return articuloService.findAllVendidos(id);
 	}
 	
 }

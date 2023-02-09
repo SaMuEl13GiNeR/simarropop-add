@@ -81,6 +81,21 @@ public class ArticuloServiceImpl implements IArticuloService{
 	public Articulo update(Articulo articulo) {
 		return articuloDao.save(articulo);
 	}
+
+	@Override
+	public List<Articulo> findAllAlien(Long id) {
+		return articuloDao.findAllAlien(id);
+	}
+
+	@Override
+	public List<Articulo> findAllAlienNoVendidos(Long id) {
+		return articuloDao.findAllAlienNoVendidos(id);
+	}
+
+	@Override
+	public List<Articulo> findAllVendidos(Long id) {
+		return articuloDao.findAllUsuarioVendidos(id);
+	}
 	
 
 }

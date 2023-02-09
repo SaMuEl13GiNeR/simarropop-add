@@ -8,6 +8,12 @@ public interface IArticuloService {
 	
 	public List<Articulo> findAll();
 	
+	public List<Articulo> findAllAlien(Long id);
+	
+	public List<Articulo> findAllAlienNoVendidos(Long id);
+	
+	public List<Articulo> findAllVendidos(Long id);
+	
 	public Articulo save(Articulo articulo);
 	
 	public Articulo findById(Long id);
