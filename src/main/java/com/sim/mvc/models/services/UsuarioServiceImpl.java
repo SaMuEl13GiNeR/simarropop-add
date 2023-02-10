@@ -18,11 +18,12 @@ public class UsuarioServiceImpl implements IUsuarioService{
 
 	@Override
 	public List<Usuario> findAll() {
-		return (List<Usuario>) usuarioDao.findAll();
+		return (List<Usuario>) usuarioDao.findAllUsuarios();
 	}
 
 	@Override
 	public Usuario save(Usuario usuario) {
+		usuario.setUser(true);
 		return usuarioDao.save(usuario);
 	}
 
@@ -38,12 +39,23 @@ public class UsuarioServiceImpl implements IUsuarioService{
 
 	@Override
 	public Usuario update(Usuario usuario) {
+		usuario.setUser(true);
 		return usuarioDao.save(usuario);
 	}
 
 	@Override
 	public List<Usuario> findByNombre(String nombre) {
 		return usuarioDao.findByNombre(nombre);
+	}
+
+	@Override
+	public boolean validar(Usuario usuario) {
+		Usuario usuarioBuscado = usuarioDao.findByCorreo(usuario.getCorreo());
+		if(usuarioBuscado != null && usuario.getCorreo().equals(usuarioBuscado.getCorreo()) && usuario.getContrasenya().equals(usuarioBuscado.getContrasenya())) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

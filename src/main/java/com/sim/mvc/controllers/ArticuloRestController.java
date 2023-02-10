@@ -212,6 +212,11 @@ public class ArticuloRestController {
 		return articuloService.findAllOrderByHigherPrecio();
 	}
 	
+	@GetMapping("/articulos/titulo/")
+	public List<Articulo> findByTitulo2() {
+			return articuloService.findAll();
+	}
+	
 	@GetMapping("/articulos/titulo/{titulo}")
 	public List<Articulo> findByTitulo(@PathVariable String titulo) {
 		return articuloService.findByTitulo(titulo);

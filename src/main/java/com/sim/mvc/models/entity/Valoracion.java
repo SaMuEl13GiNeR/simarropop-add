@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="valoracion")
+@Table(name="simarropop_valoracion")
 public class Valoracion implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

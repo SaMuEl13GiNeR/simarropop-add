@@ -16,4 +16,6 @@ public interface IUsuarioService {
 	public Usuario update(Usuario usuario);
 	
 	public List<Usuario> findByNombre(String nombre);
+	
+	public boolean validar(Usuario usuario);
 }

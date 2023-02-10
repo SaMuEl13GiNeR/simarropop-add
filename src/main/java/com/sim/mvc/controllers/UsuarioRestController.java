@@ -39,7 +39,7 @@ public class UsuarioRestController {
 		return usuarioService.findAll();
 	}
 	
-	@GetMapping("/usuario/{id}")
+	@GetMapping("/usuarios/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id) {
 		
 		Usuario usuario = null;
@@ -61,7 +61,7 @@ public class UsuarioRestController {
 		return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
 	}
 	
-	@PostMapping("/usuario/nuevo")
+	@PostMapping("/usuarios/nuevo")
 	public ResponseEntity<?> create(@RequestBody Usuario usuario, BindingResult result) {
 		
 		Usuario usuarioNew = null;
@@ -91,7 +91,7 @@ public class UsuarioRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
-	@DeleteMapping("/usuario/{id}")
+	@DeleteMapping("/usuarios/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		
 		Map<String, Object> response = new HashMap<>();
@@ -110,7 +110,7 @@ public class UsuarioRestController {
 	}
 	
 	
-	@PutMapping("/usuario/{id}")
+	@PutMapping("/usuarios/{id}")
 	public ResponseEntity<?> update(@RequestBody Usuario usuario, BindingResult result, @PathVariable Long id) {
 
 		Usuario usuarioActual = usuarioService.findById(id);
@@ -165,9 +165,14 @@ public class UsuarioRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/usuario/nombre/{nombre}")
+	@GetMapping("/usuarios/nombre/{nombre}")
 	public List<Usuario> findByNombre(@PathVariable String nombre) {
 		return usuarioService.findByNombre(nombre);
+	}
+	
+	@GetMapping("/usuarios/validar")
+	public boolean findByNombre(@RequestBody Usuario usuario) {		
+		return usuarioService.validar(usuario);
 	}
 
 }

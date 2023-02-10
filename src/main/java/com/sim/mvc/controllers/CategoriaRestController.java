@@ -33,7 +33,7 @@ public class CategoriaRestController {
 		return categoriaService.findAll();
 	}
 	
-	@GetMapping("/categoria/{id}")
+	@GetMapping("/categorias/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id) {
 		
 		Categoria categoria = null;
@@ -48,7 +48,7 @@ public class CategoriaRestController {
 		}
 		
 		if(categoria == null) {
-			response.put("mensaje", "El categoria ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
+			response.put("mensaje", "La categoria ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		
