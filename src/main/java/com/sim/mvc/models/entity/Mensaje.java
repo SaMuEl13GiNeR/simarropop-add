@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="mensaje")
+@Table(name="simarropop_mensaje")
 public class Mensaje implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -19,11 +19,11 @@ public class Mensaje implements Serializable {
 	private java.sql.Timestamp hora;
 	
 	@ManyToOne
-	@JoinColumn(name = "usuario_emisor", nullable = false)
+	@JoinColumn(name = "usuario_emisor")
 	private Usuario usuarioEmisor;
 	
 	@ManyToOne
-	@JoinColumn(name = "usuario_receptor", nullable = false)
+	@JoinColumn(name = "usuario_receptor")
 	private Usuario usuarioReceptor;
 
 	public Long getId() {

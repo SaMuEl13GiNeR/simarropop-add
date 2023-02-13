@@ -15,9 +15,6 @@ public class Categoria implements Serializable {
 	@Column(name="tipo")
 	private String tipo;
 	
-//	@OneToMany(mappedBy="categoria")
-//	private Set<Articulo> articulos;
-
 	public Long getId() {
 		return id;
 	}
@@ -33,25 +30,11 @@ public class Categoria implements Serializable {
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
-
 	
-
-//	public Set<Articulo> getArticulos() {
-//		return articulos;
-//	}
-//
-//	public void setArticulos(Set<Articulo> articulos) {
-//		this.articulos = articulos;
-//	}
-
-	
-	public Categoria(Long id, String tipo
-//			, Set<Articulo> articulos
-			) {
+	public Categoria(Long id, String tipo) {
 		super();
 		this.id = id;
 		this.tipo = tipo;
-//		this.articulos = articulos;
 	}
 
 	public Categoria() {
@@ -60,13 +43,7 @@ public class Categoria implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Categoria [id=" + id + ", tipo=" + tipo + 
-//				", articulos=" + articulos + 
-				"]";
+		return "Categoria [id=" + id + ", tipo=" + tipo + "]";
 	}
-
-
-	
-	
 	
 }

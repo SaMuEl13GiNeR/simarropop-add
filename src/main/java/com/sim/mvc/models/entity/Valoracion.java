@@ -1,17 +1,12 @@
 package com.sim.mvc.models.entity;
 
 import java.io.Serializable;
-import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import jakarta.persistence.*;
 
 @Entity
 @Table(name="simarropop_valoracion")
 public class Valoracion implements Serializable {
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
@@ -23,13 +18,11 @@ public class Valoracion implements Serializable {
 	private String opinion;
 	
 	@ManyToOne
-//	@JsonManagedReference
-	@JoinColumn(name = "usuario_emisor", nullable = false)
+	@JoinColumn(name = "usuario_emisor")
 	private Usuario usuarioEmisor;
 	
 	@ManyToOne
-//	@JsonManagedReference
-	@JoinColumn(name = "usuario_receptor", nullable = false)
+	@JoinColumn(name = "usuario_receptor")
 	private Usuario usuarioReceptor;
 
 	public Long getId() {

@@ -1,7 +1,6 @@
 package com.sim.mvc.models.entity;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -36,24 +35,7 @@ public class Usuario implements Serializable {
 	@Column(name="is_user")
 	private boolean isUser;
 	
-//    @OneToMany(mappedBy="usuarioComprador")
-//    private Set<Articulo> articulosComprados;
-//   
-//    @OneToMany(mappedBy="usuarioVendedor")
-//    private Set<Articulo> articulosVendidos;
-//    
-//    @OneToMany(mappedBy="usuarioEmisor")
-//    private Set<Valoracion> valoracionesEmisor;
-//    
-//    @OneToMany(mappedBy="usuarioReceptor")
-//    private Set<Valoracion> valoracionesReceptor;
-//    
-//    @OneToMany(mappedBy="usuarioEmisor")
-//    private Set<Mensaje> mensajesEmisor;
-//    
-//    @OneToMany(mappedBy="usuarioReceptor")
-//    private Set<Mensaje> mensajesReceptor;
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -102,7 +84,6 @@ public class Usuario implements Serializable {
 		this.isUser = isUser;
 	}
 	
-
 //	public String getAvatar() {
 //		return avatar;
 //	}
@@ -119,63 +100,11 @@ public class Usuario implements Serializable {
 		this.correo = correo;
 	}
 
-//	public Set<Articulo> getArticulosComprados() {
-//		return articulosComprados;
-//	}
-//
-//	public void setArticulosComprados(Set<Articulo> articulosComprados) {
-//		this.articulosComprados = articulosComprados;
-//	}
-//
-//	public Set<Articulo> getArticulosVendidos() {
-//		return articulosVendidos;
-//	}
-//
-//	public void setArticulosVendidos(Set<Articulo> articulosVendidos) {
-//		this.articulosVendidos = articulosVendidos;
-//	}
-//
-//	public Set<Valoracion> getValoracionesEmisor() {
-//		return valoracionesEmisor;
-//	}
-//
-//	public void setValoracionesEmisor(Set<Valoracion> valoracionesEmisor) {
-//		this.valoracionesEmisor = valoracionesEmisor;
-//	}
-//
-//	public Set<Valoracion> getValoracionesReceptor() {
-//		return valoracionesReceptor;
-//	}
-//
-//	public void setValoracionesReceptor(Set<Valoracion> valoracionesReceptor) {
-//		this.valoracionesReceptor = valoracionesReceptor;
-//	}
-//
-//	public Set<Mensaje> getMensajesEmisor() {
-//		return mensajesEmisor;
-//	}
-//	
-//	public void setMensajesEmisor(Set<Mensaje> mensajesEmisor) {
-//		this.mensajesEmisor = mensajesEmisor;
-//	}
-//
-//	public void setMensajesReceptor(Set<Mensaje> mensajesReceptor) {
-//		this.mensajesReceptor = mensajesReceptor;
-//	}
-//
-//	public Set<Mensaje> getMensajesReceptor() {
-//		return mensajesReceptor;
-//	}
-
 	public Usuario() {
 		super();
 	}
 
-
-
-	public Usuario(Long id, String nombre, String apellidos, String ubicacion, String contrasenya, String correo, boolean isUser
-//			Set<Articulo> articulosComprados, Set<Articulo> articulosVendidos,Set<Valoracion> valoracionesEmisor, Set<Valoracion> valoracionesReceptor, Set<Mensaje> mensajesEmisor,Set<Mensaje> mensajesReceptor
-			) {
+	public Usuario(Long id, String nombre, String apellidos, String ubicacion, String contrasenya, String correo, boolean isUser) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -184,31 +113,12 @@ public class Usuario implements Serializable {
 		this.contrasenya = contrasenya;
 		this.correo = correo;
 		this.isUser = isUser;
-//		this.articulosComprados = articulosComprados;
-//		this.articulosVendidos = articulosVendidos;
-//		this.valoracionesEmisor = valoracionesEmisor;
-//		this.valoracionesReceptor = valoracionesReceptor;
-//		this.mensajesEmisor = mensajesEmisor;
-//		this.mensajesReceptor = mensajesReceptor;
 	}
 
 	@Override
 	public String toString() {
 		return "Usuario [id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", ubicacion=" + ubicacion
-				+ ", contrasenya=" + contrasenya + ", correo=" + correo + 
-//				", articulosComprados=" + articulosComprados+ ", articulosVendidos=" + articulosVendidos + ", valoracionesEmisor=" + valoracionesEmisor+ ", valoracionesReceptor=" + valoracionesReceptor + ", mensajesEmisor=" + mensajesEmisor+ ", mensajesReceptor=" + mensajesReceptor + 
-				"]";
-	}
-
-
-
-
-
-	
-
-
-    
-    
-    
+				+ ", contrasenya=" + contrasenya + ", correo=" + correo + "]";
+	}    
     
 }

@@ -32,7 +32,7 @@ public class ValoracionServiceImpl implements IValoracionService{
 	public Valoracion findById(Long id) {
 		return valoracionDao.findById(id).orElse(null);
 	}
-
+	
 	@Override
 	public void delete(Long id) {
 		valoracionDao.deleteById(id);
@@ -47,7 +47,7 @@ public class ValoracionServiceImpl implements IValoracionService{
 	public float mediaUsuario(Long id) {
 		float media = 0;
 		List<Valoracion> valoracionesDeUsuario = valoracionDao.findByUsuarioReceptor(id);
-		if (valoracionesDeUsuario == null) {
+		if (valoracionesDeUsuario.size() == 0) {
 			return media;
 		}
 		for (int i = 0; i < valoracionesDeUsuario.size(); i++) {

@@ -1,5 +1,7 @@
 package com.sim.mvc.controllers;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,50 +23,51 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sim.mvc.models.entity.Valoracion;
-import com.sim.mvc.models.services.IValoracionService;
+import com.sim.mvc.models.entity.Mensaje;
+import com.sim.mvc.models.entity.Usuario;
+import com.sim.mvc.models.services.IMensajeService;
 
 @CrossOrigin(origins = { "http://192.168.8.226:4200" })
 @RestController
 @RequestMapping("/simarropop")
-public class ValoracionRestController {
+public class MensajeRestController {
 	
-
 	@Autowired
-	@Qualifier("ValoracionServiceImpl")
-	private IValoracionService valoracionService;
+	@Qualifier("MensajeServiceImpl")
+	private IMensajeService mensajeService;
 	
-	@GetMapping("/valoraciones")
-	public List<Valoracion> findAll() {
-		return valoracionService.findAll();
+	@GetMapping("/mensajes")
+	public List<Mensaje> findAll() {
+		return mensajeService.findAll();
 	}
 	
-	@GetMapping("/valoraciones/{id}")
+	@GetMapping("/mensajes/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id) {
 		
-		Valoracion valoracion = null;
+		Mensaje mensaje = null;
 		Map<String, Object> response = new HashMap<>();
 		
 		try {
-			valoracion = valoracionService.findById(id);
+			mensaje = mensajeService.findById(id);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar la consulta en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		if(valoracion == null) {
-			response.put("mensaje", "La valoracion ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
+		if(mensaje == null) {
+			response.put("mensaje", "El mensaje ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<Valoracion>(valoracion, HttpStatus.OK);
+		return new ResponseEntity<Mensaje>(mensaje, HttpStatus.OK);
 	}
 	
-	@PostMapping("/valoraciones/nuevo")
-	public ResponseEntity<?> create(@RequestBody Valoracion valoracion, BindingResult result) {
+	@PostMapping("/mensajes/nuevo")
+	public ResponseEntity<?> create(@RequestBody Mensaje mensaje, BindingResult result) {
+		mensaje.setHora(new Timestamp(System.currentTimeMillis()));
 		
-		Valoracion valoracionNew = null;
+		Mensaje mensajeNew = null;
 		Map<String, Object> response = new HashMap<>();
 		
 		if(result.hasErrors()) {
@@ -79,49 +82,42 @@ public class ValoracionRestController {
 		}
 		
 		try {
-			valoracionNew = valoracionService.save(valoracion);
+			mensajeNew = mensajeService.save(mensaje);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar el insert en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "La valoracion ha sido creado con éxito!");
-		response.put("valoracion", valoracionNew);
+		response.put("mensajee", "El mensaje ha sido creado con éxito!");
+		response.put("mensaje", mensajeNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
-	@DeleteMapping("/valoraciones/{id}")
+	@DeleteMapping("/mensajes/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
 		
 		Map<String, Object> response = new HashMap<>();
 		
 		try {
-			valoracionService.delete(id);
+			mensajeService.delete(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al eliminar la valoracion de la base de datos");
+			response.put("mensaje", "Error al eliminar el mensaje de la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "Valoracion eliminada con éxito!");
+		response.put("mensaje", "Mensaje eliminado con éxito!");
 		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	
-	
-	@GetMapping("/valoraciones/media/{id}")
-	public float findByMedia(@PathVariable Long id) {		
-		return valoracionService.mediaUsuario(id);
-	}
-	
-	
-	@PutMapping("/valoraciones/{id}")
-	public ResponseEntity<?> update(@RequestBody Valoracion valoracion, BindingResult result, @PathVariable Long id) {
+	@PutMapping("/mensajes/{id}")
+	public ResponseEntity<?> update(@RequestBody Mensaje mensaje, BindingResult result, @PathVariable Long id) {
+		
+		Mensaje mensajeActual = mensajeService.findById(id);
 
-		Valoracion valoracionActual = valoracionService.findById(id);
-
-		Valoracion valoracionUpdated = null;
+		Mensaje mensajeUpdated = null;
 
 		Map<String, Object> response = new HashMap<>();
 		
@@ -136,30 +132,53 @@ public class ValoracionRestController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		
-		if (valoracionActual == null) {
-			response.put("mensaje", "Error: no se pudo editar, la valoracion ID: "
+		if (mensajeActual == null) {
+			response.put("mensaje", "Error: no se pudo editar, el mensaje ID: "
 					.concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 
 		try {
 
-			valoracionActual.setEstrellas(valoracion.getEstrellas());
-			valoracionActual.setOpinion(valoracion.getOpinion());
-			valoracionActual.setUsuarioEmisor(valoracion.getUsuarioEmisor());
-			valoracionActual.setUsuarioReceptor(valoracion.getUsuarioReceptor());
+			mensajeActual.setContenido(mensaje.getContenido());
+			mensajeActual.setHora(mensaje.getHora());
+			mensajeActual.setUsuarioEmisor(mensaje.getUsuarioEmisor());
+			mensajeActual.setUsuarioReceptor(mensaje.getUsuarioReceptor());
 
-			valoracionUpdated = valoracionService.save(valoracionActual);
+			mensajeUpdated = mensajeService.save(mensajeActual);
 
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al actualizar la valoracion en la base de datos");
+			response.put("mensajee", "Error al actualizar el mensaje en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		response.put("mensaje", "La valoracion ha sido actualizado con éxito!");
-		response.put("valoracion", valoracionUpdated);
+		response.put("mensajee", "El mensaje ha sido actualizado con éxito!");
+		response.put("mensaje", mensajeUpdated);
 
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
+	
+	@GetMapping("/mensajes/common/{idEmisor}/{idReceptor}")
+	public List<Mensaje> getMensajesInCommon(@PathVariable Long idEmisor,@PathVariable Long idReceptor) {
+		return mensajeService.getMensajesInCommon(idEmisor, idReceptor);
+	}
+	
+	@GetMapping("/mensajes/usuario/{id}")
+	public List<Usuario> getUsuarioMensajesInCommon(@PathVariable Long id) {
+		List<Mensaje> listaMensajes = mensajeService.getUsuarioMensajesInCommon(id);
+		List<Usuario> listaUsuarios = new ArrayList<Usuario>();
+		for (int i = 0; i < listaMensajes.size(); i++) {
+			if (listaMensajes.get(i).getUsuarioEmisor().getId() != id) {
+				listaUsuarios.add(listaMensajes.get(i).getUsuarioEmisor());
+			} else {
+				if (listaMensajes.get(i).getUsuarioReceptor().getId() != id) {
+					listaUsuarios.add(listaMensajes.get(i).getUsuarioReceptor());
+				}
+			}
+		}
+		return listaUsuarios.stream().distinct().collect(Collectors.toList());
+	}
+	
+
 }
