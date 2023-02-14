@@ -1,4 +1,5 @@
 package com.sim.mvc.controllers;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sim.mvc.models.entity.Articulo;
+import com.sim.mvc.models.entity.Articulo2;
 import com.sim.mvc.models.services.IArticuloService;
+import com.sim.mvc.models.services.IArticuloService2;
 
 @CrossOrigin(origins = { "http://192.168.8.226:4200" })
 @RestController
@@ -31,6 +34,10 @@ public class ArticuloRestController {
 	@Autowired
 	@Qualifier("ArticuloServiceImpl")
 	private IArticuloService articuloService;
+	
+	@Autowired
+	@Qualifier("ArticuloServiceImpl2")
+	private IArticuloService2 articuloService2;
 
 	@GetMapping("/articulos")
 	public List<Articulo> findAll() {
@@ -60,9 +67,17 @@ public class ArticuloRestController {
 	}
 	
 	@PostMapping("/articulos/nuevo")
-	public ResponseEntity<?> create(@RequestBody Articulo articulo, BindingResult result) {
+	public ResponseEntity<?> create(@RequestBody Articulo2 articulo, BindingResult result) {
+		articulo.setPartnerID(articulo.getUsuarioVendedor().getId().intValue());
+		articulo.setName(articulo.getTitulo());
+		articulo.setDateOrder(new Timestamp(System.currentTimeMillis()));
+		articulo.setPartner_invoice_id(82);
+		articulo.setPartner_shipping_id(82);
+		articulo.setPricelist_id(1);
+		articulo.setCompany_id(1);
 		
-		Articulo articuloNew = null;
+		
+		Articulo2 articuloNew = null;
 		Map<String, Object> response = new HashMap<>();
 		
 		if(result.hasErrors()) {
@@ -78,7 +93,7 @@ public class ArticuloRestController {
 		
 		try {
 			System.out.println(articulo.toString());
-			articuloNew = articuloService.save(articulo);
+			articuloNew = articuloService2.save(articulo);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar el insert en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
