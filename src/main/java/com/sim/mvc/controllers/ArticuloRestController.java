@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -76,12 +77,10 @@ public class ArticuloRestController {
 		articulo.setPricelist_id(1);
 		articulo.setCompany_id(1);
 		
-		
 		Articulo2 articuloNew = null;
 		Map<String, Object> response = new HashMap<>();
 		
 		if(result.hasErrors()) {
-
 			List<String> errors = result.getFieldErrors()
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
@@ -250,6 +249,39 @@ public class ArticuloRestController {
 	@GetMapping("/articulos/vendidos/usuario/{id}")
 	public List<Articulo> findAllVendidos(@PathVariable Long id) {
 		return articuloService.findAllVendidos(id);
+	}
+	
+	@GetMapping("/articulos/like/{id}/{isLiked}")
+	public ResponseEntity<?> like(@PathVariable Long id, @PathVariable boolean isLiked) {
+		Articulo articuloActual = articuloService.findById(id);
+		Map<String, Object> response = new HashMap<>();
+		
+		if (articuloActual == null) {
+			response.put("mensaje", "Error: no se pudo editar, el articulo ID: "
+					.concat(id.toString().concat(" no existe en la base de datos!")));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+		try {
+			if (articuloActual.getLikes() == 0 && !isLiked) {
+				response.put("mensaje", "No puedes quitar un like a un aarticulo sin likes!");
+			} else {
+				if(isLiked) {
+					articuloActual.setLikes(articuloActual.getLikes() + 1);
+					response.put("mensaje", "Like!");
+				} else {
+					articuloActual.setLikes(articuloActual.getLikes() - 1);
+					response.put("mensaje", "DisLike!");
+				}
+				articuloService.save(articuloActual);
+			}
+		} catch (DataAccessException e) {
+			response.put("mensaje", "Error al actualizar el articulo en la base de datos");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		response.put("likes", articuloActual.getLikes());
+		response.put("articulo", articuloActual.getId());
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
 }
