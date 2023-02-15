@@ -27,6 +27,9 @@ public interface IArticuloDAO extends JpaRepository<Articulo, Long> {
 	@Query("FROM Articulo a WHERE lower(a.titulo) LIKE lower(concat('%',:titulo,'%'))")
 	List<Articulo> findByTitulo(@Param("titulo") String titulo);
 	
+	@Query("FROM Articulo a WHERE a.usuarioVendedor.id != :id AND lower(a.titulo) LIKE lower(concat('%',:titulo,'%'))")
+	List<Articulo> findByTituloAjenos(@Param("id") Long id, @Param("titulo") String titulo);
+	
 	@Query("FROM Articulo a WHERE a.usuarioVendedor.id != :id")
 	List<Articulo> findAllAlien(@Param("id") Long id);
 	

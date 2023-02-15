@@ -170,8 +170,11 @@ public class UsuarioRestController {
 		return usuarioService.findByNombre(nombre);
 	}
 	
-	@GetMapping("/usuarios/validar")
-	public boolean findByNombre(@RequestBody Usuario usuario) {		
+	@GetMapping("/usuarios/validar/{correo}/{contrasenya}")
+	public Usuario findByNombre(@PathVariable String correo, @PathVariable String contrasenya) {
+		Usuario usuario = new Usuario();
+		usuario.setCorreo(correo);
+		usuario.setContrasenya(contrasenya);
 		return usuarioService.validar(usuario);
 	}
 

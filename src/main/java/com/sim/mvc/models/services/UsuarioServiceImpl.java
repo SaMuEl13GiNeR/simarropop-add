@@ -49,12 +49,12 @@ public class UsuarioServiceImpl implements IUsuarioService{
 	}
 
 	@Override
-	public boolean validar(Usuario usuario) {
+	public Usuario validar(Usuario usuario) {
 		Usuario usuarioBuscado = usuarioDao.findByCorreo(usuario.getCorreo());
 		if(usuarioBuscado != null && usuario.getCorreo().equals(usuarioBuscado.getCorreo()) && usuario.getContrasenya().equals(usuarioBuscado.getContrasenya())) {
-			return true;
+			return usuarioBuscado;
 		} else {
-			return false;
+			return null;
 		}
 	}
 

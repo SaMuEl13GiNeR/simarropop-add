@@ -42,6 +42,11 @@ public class Foto implements Serializable {
 		this.articulo = articulo;
 	}
 
+	
+	public Foto() {
+		super();
+	}
+
 	public Foto(Long id, String imagen, Articulo articulo) {
 		super();
 		this.id = id;

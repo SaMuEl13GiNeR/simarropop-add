@@ -93,6 +93,11 @@ public class ArticuloServiceImpl implements IArticuloService{
 	public List<Articulo> findAllVendidos(Long id) {
 		return articuloDao.findAllUsuarioVendidos(id);
 	}
+
+	@Override
+	public List<Articulo> findByAjenoTitulo(Long id, String titulo) {
+		return articuloDao.findByTituloAjenos(id, titulo);
+	}
 	
 
 }

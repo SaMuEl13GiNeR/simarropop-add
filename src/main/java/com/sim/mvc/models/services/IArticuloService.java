@@ -32,5 +32,7 @@ public interface IArticuloService {
 	
 	public List<Articulo> findByTitulo(String titulo);
 	
+	public List<Articulo> findByAjenoTitulo(Long id, String titulo);
+	
 	public Articulo update(Articulo articulo);
 }

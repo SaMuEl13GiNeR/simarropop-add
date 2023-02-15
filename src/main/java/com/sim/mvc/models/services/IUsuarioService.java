@@ -17,5 +17,5 @@ public interface IUsuarioService {
 	
 	public List<Usuario> findByNombre(String nombre);
 	
-	public boolean validar(Usuario usuario);
+	public Usuario validar(Usuario usuario);
 }

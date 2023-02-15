@@ -236,6 +236,11 @@ public class ArticuloRestController {
 		return articuloService.findByTitulo(titulo);
 	}
 	
+	@GetMapping("/articulos/ajenos/{id}/titulo/{titulo}")
+	public List<Articulo> findByTitulo(@PathVariable Long id, @PathVariable String titulo) {
+		return articuloService.findByAjenoTitulo(id, titulo);
+	}
+	
 	@GetMapping("/articulos/ajenos/{id}")
 	public List<Articulo> findAllAlien(@PathVariable Long id) {
 		return articuloService.findAllAlien(id);
