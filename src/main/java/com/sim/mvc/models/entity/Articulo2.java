@@ -7,7 +7,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 	
 @Entity
-@Table(name="sale_order")
+@Table(name="simarropop.articulo")
 public class Articulo2 implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

@@ -68,16 +68,16 @@ public class ArticuloRestController {
 	}
 	
 	@PostMapping("/articulos/nuevo")
-	public ResponseEntity<?> create(@RequestBody Articulo2 articulo, BindingResult result) {
-		articulo.setPartnerID(articulo.getUsuarioVendedor().getId().intValue());
-		articulo.setName(articulo.getTitulo());
-		articulo.setDateOrder(new Timestamp(System.currentTimeMillis()));
-		articulo.setPartner_invoice_id(82);
-		articulo.setPartner_shipping_id(82);
-		articulo.setPricelist_id(1);
-		articulo.setCompany_id(1);
+	public ResponseEntity<?> create(@RequestBody Articulo articulo, BindingResult result) {
+//		articulo.setPartnerID(articulo.getUsuarioVendedor().getId().intValue());
+//		articulo.setName(articulo.getTitulo());
+//		articulo.setDateOrder(new Timestamp(System.currentTimeMillis()));
+//		articulo.setPartner_invoice_id(82);
+//		articulo.setPartner_shipping_id(82);
+//		articulo.setPricelist_id(1);
+//		articulo.setCompany_id(1);
 		
-		Articulo2 articuloNew = null;
+		Articulo articuloNew = null;
 		Map<String, Object> response = new HashMap<>();
 		
 		if(result.hasErrors()) {
@@ -92,7 +92,7 @@ public class ArticuloRestController {
 		
 		try {
 			System.out.println(articulo.toString());
-			articuloNew = articuloService2.save(articulo);
+			articuloNew = articuloService.save(articulo);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar el insert en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));

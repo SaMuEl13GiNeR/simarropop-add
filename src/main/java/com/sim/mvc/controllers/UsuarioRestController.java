@@ -117,7 +117,7 @@ public class UsuarioRestController {
 
 		Usuario usuarioUpdated = null;
 
-		Map<String, Object> response = new HashMap<>();
+		Map<Usuario, Object> response = new HashMap<>();
 		
 		if(result.hasErrors()) {
 
@@ -126,14 +126,14 @@ public class UsuarioRestController {
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
 			
-			response.put("errors", errors);
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+//			response.put("errors", errors);
+			return null;
 		}
 		
 		if (usuarioActual == null) {
-			response.put("mensaje", "Error: no se pudo editar, el usuario ID: "
-					.concat(id.toString().concat(" no existe en la base de datos!")));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+//			response.put("mensaje", "Error: no se pudo editar, el usuario ID: "
+//					.concat(id.toString().concat(" no existe en la base de datos!")));
+			return null;
 		}
 
 		try {
@@ -154,15 +154,15 @@ public class UsuarioRestController {
 			usuarioUpdated = usuarioService.save(usuarioActual);
 
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al actualizar el usuario en la base de datos");
-			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+//			response.put("mensaje", "Error al actualizar el usuario en la base de datos");
+//			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return null;
 		}
 
-		response.put("mensaje", "El usuario ha sido actualizado con éxito!");
-		response.put("usuario", usuarioUpdated);
+//		response.put("mensaje", "El usuario ha sido actualizado con éxito!");
+//		response.put("usuario", usuarioUpdated);
 
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+		return new ResponseEntity<Usuario>(usuarioUpdated, HttpStatus.OK);
 	}
 	
 	@GetMapping("/usuarios/nombre/{nombre}")
