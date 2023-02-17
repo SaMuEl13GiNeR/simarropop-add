@@ -43,9 +43,7 @@ public class Articulo implements Serializable {
 	@JoinColumn(name = "categoria", nullable = true)
 	private Categoria categoria;
 
-	@JsonIgnore
-    @OneToMany(mappedBy="articulo")
-    private Set<Foto> fotos;
+
 
 	public Long getId() {
 		return id;
@@ -103,13 +101,7 @@ public class Articulo implements Serializable {
 		this.categoria = categoria;
 	}
 
-	public Set<Foto> getFotos() {
-		return fotos;
-	}
 
-	public void setFotos(Set<Foto> fotos) {
-		this.fotos = fotos;
-	}
 
 	public Usuario getUsuarioVendedor() {
 		return usuarioVendedor;
@@ -136,37 +128,7 @@ public class Articulo implements Serializable {
 	}
 	
 
-	public Articulo(Long id, String titulo, int likes, String descripcion, float precio, String estado, boolean vendido,
-			Usuario usuarioVendedor, Usuario usuarioComprador, Categoria categoria, Set<Foto> fotos) {
-		super();
-		this.id = id;
-		this.titulo = titulo;
-		this.likes = likes;
-		this.descripcion = descripcion;
-		this.precio = precio;
-		this.estado = estado;
-		this.vendido = vendido;
-		this.usuarioVendedor = usuarioVendedor;
-		this.usuarioComprador = usuarioComprador;
-		this.categoria = categoria;
-		this.fotos = fotos;
-	}
 
-	public Articulo(Long id, String titulo, int likes, String descripcion, float precio, String estado, boolean vendido,
-			Usuario usuarioVendedor, Usuario usuarioComprador, Categoria categoria) {
-		super();
-		this.id = id;
-		this.titulo = titulo;
-		this.likes = likes;
-		this.descripcion = descripcion;
-		this.precio = precio;
-		this.estado = estado;
-		this.vendido = vendido;
-		this.usuarioVendedor = usuarioVendedor;
-		this.usuarioComprador = usuarioComprador;
-		this.categoria = categoria;
-
-	}
 
 	public Articulo() {
 		super();
@@ -176,9 +138,11 @@ public class Articulo implements Serializable {
 	public String toString() {
 		return "Articulo [id=" + id + ", titulo=" + titulo + ", likes=" + likes + ", descripcion=" + descripcion
 				+ ", precio=" + precio + ", estado=" + estado + ", vendido=" + vendido + ", usuarioVendedor="
-				+ usuarioVendedor + ", usuarioComprador=" + usuarioComprador + ", categoria=" + categoria + ", fotos="
-				+ fotos + "]";
+				+ usuarioVendedor + ", usuarioComprador=" + usuarioComprador + ", categoria=" + categoria + "]";
 	}
+
+
+
 
 
 	

@@ -88,7 +88,7 @@ public class ValoracionRestController {
 		
 		response.put("mensaje", "La valoracion ha sido creado con éxito!");
 		response.put("valoracion", valoracionNew);
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+		return new ResponseEntity<Valoracion>(valoracionNew, HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/valoraciones/{id}")
@@ -160,6 +160,6 @@ public class ValoracionRestController {
 		response.put("mensaje", "La valoracion ha sido actualizado con éxito!");
 		response.put("valoracion", valoracionUpdated);
 
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+		return new ResponseEntity<Valoracion>(valoracionUpdated, HttpStatus.CREATED);
 	}
 }

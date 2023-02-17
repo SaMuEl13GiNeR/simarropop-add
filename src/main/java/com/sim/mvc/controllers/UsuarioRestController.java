@@ -88,7 +88,7 @@ public class UsuarioRestController {
 		
 		response.put("mensaje", "El usuario ha sido creado con éxito!");
 		response.put("usuario", usuarioNew);
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+		return new ResponseEntity<Usuario>(usuario, HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/usuarios/{id}")
@@ -117,7 +117,7 @@ public class UsuarioRestController {
 
 		Usuario usuarioUpdated = null;
 
-		Map<Usuario, Object> response = new HashMap<>();
+//		Map<Usuario, Object> response = new HashMap<>();
 		
 		if(result.hasErrors()) {
 
@@ -141,14 +141,9 @@ public class UsuarioRestController {
 			usuarioActual.setNombre(usuario.getNombre());
 			usuarioActual.setApellidos(usuario.getApellidos());
 			usuarioActual.setUbicacion(usuario.getUbicacion());
+			usuarioActual.setCorreo(usuario.getCorreo());
 			usuarioActual.setContrasenya(usuario.getContrasenya());
 //			usuarioActual.setAvatar(usuario.getAvatar());
-//			usuarioActual.setArticulosComprados(usuario.getArticulosComprados());
-//			usuarioActual.setArticulosVendidos(usuario.getArticulosVendidos());
-//			usuarioActual.setValoracionesEmisor(usuario.getValoracionesEmisor());
-//			usuarioActual.setValoracionesReceptor(usuario.getValoracionesReceptor());
-//			usuarioActual.setMensajesEmisor(usuario.getMensajesEmisor());
-//			usuarioActual.setMensajesReceptor(usuario.getMensajesReceptor());
 			usuarioActual.setUser(usuario.getUser());
 
 			usuarioUpdated = usuarioService.save(usuarioActual);

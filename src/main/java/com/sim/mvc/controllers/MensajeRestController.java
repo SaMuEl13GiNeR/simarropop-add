@@ -91,7 +91,7 @@ public class MensajeRestController {
 		
 		response.put("mensajee", "El mensaje ha sido creado con éxito!");
 		response.put("mensaje", mensajeNew);
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+		return new ResponseEntity<Mensaje>(mensajeNew, HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/mensajes/{id}")
@@ -156,7 +156,7 @@ public class MensajeRestController {
 		response.put("mensajee", "El mensaje ha sido actualizado con éxito!");
 		response.put("mensaje", mensajeUpdated);
 
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+		return new ResponseEntity<Mensaje>(mensajeUpdated, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/mensajes/common/{idEmisor}/{idReceptor}")

@@ -1,14 +1,23 @@
 package com.sim.mvc.controllers;
+import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -25,7 +34,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sim.mvc.models.entity.Articulo;
 import com.sim.mvc.models.entity.Articulo2;
 import com.sim.mvc.models.services.IArticuloService;
-import com.sim.mvc.models.services.IArticuloService2;
 
 @CrossOrigin(origins = { "http://192.168.8.226:4200" })
 @RestController
@@ -36,35 +44,34 @@ public class ArticuloRestController {
 	@Qualifier("ArticuloServiceImpl")
 	private IArticuloService articuloService;
 	
-	@Autowired
-	@Qualifier("ArticuloServiceImpl2")
-	private IArticuloService2 articuloService2;
 
 	@GetMapping("/articulos")
-	public List<Articulo> findAll() {
-		return articuloService.findAll();
+	public List<Articulo2> findAll() {
+		return convertListFromArticuloToArticulo2(articuloService.findAll());
 	}
 	
 	@GetMapping("/articulos/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id) {
 		
 		Articulo articulo = null;
+	
 		Map<String, Object> response = new HashMap<>();
 		
 		try {
-			articulo = articuloService.findById(id);
+			articulo = articuloService.findById(id);			
+	
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar la consulta en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		} 
 		
 		if(articulo == null) {
 			response.put("mensaje", "El articulo ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<Articulo>(articulo, HttpStatus.OK);
+		return new ResponseEntity<Articulo2>(convertFromArticuloToArticulo2(articulo), HttpStatus.OK);
 	}
 	
 	@PostMapping("/articulos/nuevo")
@@ -101,7 +108,7 @@ public class ArticuloRestController {
 		
 		response.put("mensaje", "El articulo ha sido creado con éxito!");
 		response.put("articulo", articuloNew);
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+		return new ResponseEntity<Articulo2>(convertFromArticuloToArticulo2(articuloNew), HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/articulos/{id}")
@@ -150,36 +157,7 @@ public class ArticuloRestController {
 		}
 
 		try {
-//			if( articulo.getTitulo() != null) {
-//				articuloActual.setTitulo(articulo.getTitulo());
-//			}
-//			if( articulo.getLikes() != 0) {
-//				articuloActual.setLikes(articulo.getLikes());
-//			}
-//			if( articulo.getDescripcion() != null) {
-//				articuloActual.setDescripcion(articulo.getDescripcion());
-//			}
-//			if( articulo.getPrecio() != 0) {
-//				articuloActual.setPrecio(articulo.getPrecio());
-//			}
-//			if( articulo.getEstado() != null) {
-//				articuloActual.setEstado(articulo.getEstado());
-//			}
-//			if( articulo.getUsuarioComprador() != null) {
-//				articuloActual.setUsuarioComprador(articulo.getUsuarioComprador());
-//			}
-//			if( articulo.getUsuarioVendedor() != null) {
-//				articuloActual.setUsuarioVendedor(articulo.getUsuarioVendedor());
-//			}
-//			if( articulo.getVendido() != false) {
-//				articuloActual.setVendido(articulo.getVendido());
-//			}
-//			if( articulo.getCategoria() != null) {
-//				articuloActual.setCategoria(articulo.getCategoria());
-//			}
-//			if( articulo.getFotos() != null) {
-//				articuloActual.setFotos(articulo.getFotos());
-//			}
+//			
 			articuloActual.setTitulo(articulo.getTitulo());
 			articuloActual.setLikes(articulo.getLikes());
 			articuloActual.setDescripcion(articulo.getDescripcion());
@@ -189,7 +167,7 @@ public class ArticuloRestController {
 			articuloActual.setUsuarioVendedor(articulo.getUsuarioVendedor());
 			articuloActual.setVendido(articulo.getVendido());
 			articuloActual.setCategoria(articulo.getCategoria());
-			articuloActual.setFotos(articulo.getFotos());
+//			articuloActual.setFoto(articulo.getFoto());
 
 
 			articuloUpdated = articuloService.save(articuloActual);
@@ -203,57 +181,57 @@ public class ArticuloRestController {
 		response.put("mensaje", "El articulo ha sido actualizado con éxito!");
 		response.put("articulo", articuloUpdated);
 
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+		return new ResponseEntity<Articulo2>(convertFromArticuloToArticulo2(articuloUpdated), HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/articulos/usuarioVendedor/{id}")
-	public List<Articulo> findByUsuarioId(@PathVariable Long id){
-		return articuloService.findByUsuarioVendedorId(id);
+	public List<Articulo2> findByUsuarioId(@PathVariable Long id){
+		return convertListFromArticuloToArticulo2(articuloService.findByUsuarioVendedorId(id));
 	}
 
 	@GetMapping("/articulos/categoria/{id}")
-	public List<Articulo> findByCategoriaId(@PathVariable Long id){
-		return articuloService.findByCategoriaId(id);
+	public List<Articulo2> findByCategoriaId(@PathVariable Long id){
+		return convertListFromArticuloToArticulo2(articuloService.findByCategoriaId(id));
 	}
 	
 	@GetMapping("/articulos/precio/lower")
-	public List<Articulo> findAllOrderByLowerPrecio(){
-		return articuloService.findAllOrderByLowerPrecio();
+	public List<Articulo2> findAllOrderByLowerPrecio(){
+		return convertListFromArticuloToArticulo2(articuloService.findAllOrderByLowerPrecio());
 	}
 	
 	@GetMapping("/articulos/precio/higher")
-	public List<Articulo> findAllOrderByHigherPrecio(){
-		return articuloService.findAllOrderByHigherPrecio();
+	public List<Articulo2> findAllOrderByHigherPrecio(){
+		return convertListFromArticuloToArticulo2(articuloService.findAllOrderByHigherPrecio());
 	}
 	
 	@GetMapping("/articulos/titulo/")
-	public List<Articulo> findByTitulo2() {
-			return articuloService.findAll();
+	public List<Articulo2> findByTitulo2() {
+			return convertListFromArticuloToArticulo2(articuloService.findAll());
 	}
 	
 	@GetMapping("/articulos/titulo/{titulo}")
-	public List<Articulo> findByTitulo(@PathVariable String titulo) {
-		return articuloService.findByTitulo(titulo);
+	public List<Articulo2> findByTitulo(@PathVariable String titulo) {
+		return convertListFromArticuloToArticulo2(articuloService.findByTitulo(titulo));
 	}
 	
 	@GetMapping("/articulos/ajenos/{id}/titulo/{titulo}")
-	public List<Articulo> findByTitulo(@PathVariable Long id, @PathVariable String titulo) {
-		return articuloService.findByAjenoTitulo(id, titulo);
+	public List<Articulo2> findByTitulo(@PathVariable Long id, @PathVariable String titulo) {
+		return convertListFromArticuloToArticulo2(articuloService.findByAjenoTitulo(id, titulo));
 	}
 	
 	@GetMapping("/articulos/ajenos/{id}")
-	public List<Articulo> findAllAlien(@PathVariable Long id) {
-		return articuloService.findAllAlien(id);
+	public List<Articulo2> findAllAlien(@PathVariable Long id) {
+		return convertListFromArticuloToArticulo2(articuloService.findAllAlien(id));
 	}
 	
 	@GetMapping("/articulos/noVendidos/ajenos/{id}")
-	public List<Articulo> findAllAlienNoVendidos(@PathVariable Long id) {
-		return articuloService.findAllAlienNoVendidos(id);
+	public List<Articulo2> findAllAlienNoVendidos(@PathVariable Long id) {
+		return convertListFromArticuloToArticulo2(articuloService.findAllAlienNoVendidos(id));
 	}
 	
 	@GetMapping("/articulos/vendidos/usuario/{id}")
-	public List<Articulo> findAllVendidos(@PathVariable Long id) {
-		return articuloService.findAllVendidos(id);
+	public List<Articulo2> findAllVendidos(@PathVariable Long id) {
+		return convertListFromArticuloToArticulo2(articuloService.findAllVendidos(id));
 	}
 	
 	@GetMapping("/articulos/like/{id}/{isLiked}")
@@ -287,6 +265,77 @@ public class ArticuloRestController {
 		response.put("likes", articuloActual.getLikes());
 		response.put("articulo", articuloActual.getId());
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+	}
+	
+	public Articulo2 getArticuloFoto(Articulo articulo) {
+		
+		Articulo2 articulo2 = new Articulo2(articulo);
+		
+		try {
+			
+		HttpClient httpClient = HttpClientBuilder.create().build();
+		HttpPost postRequest = new HttpPost("http://192.168.8.226:8069/jsonrpc");
+		
+		Map<String, Object> response2 = new HashMap<>();		
+			
+			JSONObject jsonRpcRequest = new JSONObject();
+			jsonRpcRequest.put("jsonrpc", "2.0");
+			jsonRpcRequest.put("id", 1);
+			jsonRpcRequest.put("method", "call");
+			JSONObject params = new JSONObject();
+			params.put("service", "object");
+			params.put("method", "execute");
+			JSONArray args = new JSONArray();
+			args.put("sge22");
+			args.put(2);
+			args.put("1234");
+			args.put("simarropop.articulo");
+			args.put("read");
+			args.put(articulo.getId());
+			JSONArray campo = new JSONArray();
+			campo.put("foto");
+			args.put(campo);
+			params.put("args", args);
+			jsonRpcRequest.put("params", params);
+			
+			
+			
+			
+			StringEntity input = new StringEntity(jsonRpcRequest.toString());
+			input.setContentType("application/json");
+			postRequest.setEntity(input);
+			
+			
+	
+			HttpResponse response3 = httpClient.execute(postRequest);
+			String jsonResponse = EntityUtils.toString(response3.getEntity());
+			JSONObject jsonRpcResponse = new JSONObject(jsonResponse);
+			
+			String total = ((JSONObject) jsonRpcResponse.getJSONArray("result").get(0)).getString("foto");
+			System.out.println(total);
+
+			
+			if(!total.equals("")) {
+				articulo2.setFoto(total);
+			}
+
+		} catch(Exception e) {
+			e.getMessage();
+		}
+			
+			return articulo2;
+	}
+	
+	public List<Articulo2> convertListFromArticuloToArticulo2(List<Articulo> articulos){
+		List<Articulo2> articulos2 = new ArrayList();
+		for( int i = 0; i< articulos.size(); i++) {
+			articulos2.add(getArticuloFoto(articulos.get(i)));
+		}
+		return articulos2;
+	}
+	
+	public Articulo2 convertFromArticuloToArticulo2(Articulo articulo){
+		return getArticuloFoto(articulo);
 	}
 	
 }

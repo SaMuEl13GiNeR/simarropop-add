@@ -19,34 +19,6 @@ public class Articulo2 implements Serializable {
 	@Column(name="likes")
 	private int likes; 
 	
-	
-	
-	@Column(name="date_order")
-	private java.sql.Timestamp dateOrder;
-	
-	
-	@Column(name="name")
-	private String name;
-	
-	@Column(name="partner_invoice_id")
-	private int partner_invoice_id; 
-	
-	@Column(name="partner_shipping_id")
-	private int partner_shipping_id; 
-	
-	@Column(name="pricelist_id")
-	private int pricelist_id; 
-	
-	@Column(name="partner_id")
-	private int partnerID; 
-	
-	@Column(name="company_id")
-	private int company_id; 
-	
-	
-	
-	
-	
 	@Column(name="descripcion")
 	private String descripcion;
 	
@@ -71,9 +43,8 @@ public class Articulo2 implements Serializable {
 	@JoinColumn(name = "categoria", nullable = true)
 	private Categoria categoria;
 
-	@JsonIgnore
-    @OneToMany(mappedBy="articulo")
-    private Set<Foto> fotos;
+	@Column(name="foto")
+    private String foto;
 
 	public Long getId() {
 		return id;
@@ -131,12 +102,12 @@ public class Articulo2 implements Serializable {
 		this.categoria = categoria;
 	}
 
-	public Set<Foto> getFotos() {
-		return fotos;
+	public String getFoto() {
+		return foto;
 	}
 
-	public void setFotos(Set<Foto> fotos) {
-		this.fotos = fotos;
+	public void setFoto(String foto) {
+		this.foto = foto;
 	}
 
 	public Usuario getUsuarioVendedor() {
@@ -162,89 +133,33 @@ public class Articulo2 implements Serializable {
 	public void setVendido(boolean vendido) {
 		this.vendido = vendido;
 	}
+	
+	public Articulo2(Articulo articulo) {
+		super();
+		this.id = articulo.getId();
+		this.titulo = articulo.getTitulo();
+		this.likes = articulo.getLikes();
+		this.descripcion = articulo.getDescripcion();
+		this.precio = articulo.getPrecio();
+		this.estado = articulo.getEstado();
+		this.vendido = articulo.getVendido();
+		this.usuarioVendedor = articulo.getUsuarioVendedor();
+		this.usuarioComprador = articulo.getUsuarioComprador();
+		this.categoria = articulo.getCategoria();
+	}
 
 
 	public Articulo2() {
 		super();
 	}
 
-	
-	public int getPartnerID() {
-		return partnerID;
-	}
-
-	public void setPartnerID(int partnerID) {
-		this.partnerID = partnerID;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-	public java.sql.Timestamp getDateOrder() {
-		return dateOrder;
-	}
-
-	public void setDateOrder(java.sql.Timestamp dateOrder) {
-		this.dateOrder = dateOrder;
-	}
-
-	public int getPartner_invoice_id() {
-		return partner_invoice_id;
-	}
-
-	public void setPartner_invoice_id(int partner_invoice_id) {
-		this.partner_invoice_id = partner_invoice_id;
-	}
-
-	public int getPartner_shipping_id() {
-		return partner_shipping_id;
-	}
-
-	public void setPartner_shipping_id(int partner_shipping_id) {
-		this.partner_shipping_id = partner_shipping_id;
-	}
-
-	public int getPricelist_id() {
-		return pricelist_id;
-	}
-
-	public void setPricelist_id(int pricelist_id) {
-		this.pricelist_id = pricelist_id;
-	}
-
-	public int getCompany_id() {
-		return company_id;
-	}
-
-	public void setCompany_id(int company_id) {
-		this.company_id = company_id;
-	}
-
 	@Override
 	public String toString() {
-		return "Articulo2 [id=" + id + ", titulo=" + titulo + ", likes=" + likes + ", dateOrder=" + dateOrder
-				+ ", name=" + name + ", partner_invoice_id=" + partner_invoice_id + ", partner_shipping_id="
-				+ partner_shipping_id + ", pricelist_id=" + pricelist_id + ", partnerID=" + partnerID + ", company_id="
-				+ company_id + ", descripcion=" + descripcion + ", precio=" + precio + ", estado=" + estado
-				+ ", vendido=" + vendido + ", usuarioVendedor=" + usuarioVendedor + ", usuarioComprador="
-				+ usuarioComprador + ", categoria=" + categoria + ", fotos=" + fotos + "]";
+		return "Articulo [id=" + id + ", titulo=" + titulo + ", likes=" + likes + ", descripcion=" + descripcion
+				+ ", precio=" + precio + ", estado=" + estado + ", vendido=" + vendido + ", usuarioVendedor="
+				+ usuarioVendedor + ", usuarioComprador=" + usuarioComprador + ", categoria=" + categoria + ", foto="
+				+ foto + "]";
 	}
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
