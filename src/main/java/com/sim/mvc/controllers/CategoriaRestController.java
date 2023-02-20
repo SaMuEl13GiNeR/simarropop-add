@@ -49,7 +49,8 @@ public class CategoriaRestController {
 		
 		if(categoria == null) {
 			response.put("mensaje", "La categoria ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+//			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+			return null;
 		}
 		
 		return new ResponseEntity<Categoria>(categoria, HttpStatus.OK);

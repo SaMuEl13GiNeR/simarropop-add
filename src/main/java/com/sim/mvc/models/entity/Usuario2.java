@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name="res.partner")
-public class Usuario implements Serializable {
+public class Usuario2 implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
@@ -27,6 +27,9 @@ public class Usuario implements Serializable {
 	
 	@Column(name="correo")
 	private String correo;
+	
+	@Column(name="avatar")
+	private String avatar;
 	
 	@JsonIgnore
 	@Column(name="is_user")
@@ -80,6 +83,14 @@ public class Usuario implements Serializable {
 	public void setUser(boolean isUser) {
 		this.isUser = isUser;
 	}
+	
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
 
 	public String getCorreo() {
 		return correo;
@@ -89,11 +100,12 @@ public class Usuario implements Serializable {
 		this.correo = correo;
 	}
 
-	public Usuario() {
+	public Usuario2() {
 		super();
 	}
 
-	public Usuario(Long id, String nombre, String apellidos, String ubicacion, String contrasenya, String correo, boolean isUser) {
+	public Usuario2(Long id, String nombre, String apellidos, String ubicacion, String contrasenya, String correo,
+			String avatar, boolean isUser) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -101,13 +113,27 @@ public class Usuario implements Serializable {
 		this.ubicacion = ubicacion;
 		this.contrasenya = contrasenya;
 		this.correo = correo;
+		this.avatar = avatar;
 		this.isUser = isUser;
+	}
+	
+	public Usuario2(Usuario usuario) {
+		this.id = usuario.getId();
+		this.nombre = usuario.getNombre();
+		this.apellidos = usuario.getApellidos();
+		this.ubicacion = usuario.getUbicacion();
+		this.contrasenya = usuario.getContrasenya();
+		this.correo = usuario.getCorreo();
+		this.isUser = usuario.getUser();
 	}
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", ubicacion=" + ubicacion
-				+ ", contrasenya=" + contrasenya + ", correo=" + correo + "]";
-	}    
+		return "Usuario2 [id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", ubicacion=" + ubicacion
+				+ ", contrasenya=" + contrasenya + ", correo=" + correo + ", avatar=" + avatar + ", isUser=" + isUser
+				+ "]";
+	}
+
+  
     
 }

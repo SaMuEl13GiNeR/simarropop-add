@@ -1,10 +1,19 @@
 package com.sim.mvc.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
@@ -22,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sim.mvc.models.entity.Usuario;
+import com.sim.mvc.models.entity.Usuario2;
 import com.sim.mvc.models.services.IUsuarioService;
 
 @CrossOrigin(origins = { "http://192.168.8.226:4200" })
@@ -35,8 +45,8 @@ public class UsuarioRestController {
 	private IUsuarioService usuarioService;
 	
 	@GetMapping("/usuarios")
-	public List<Usuario> findAll() {
-		return usuarioService.findAll();
+	public List<Usuario2> findAll() {
+		return convertListFromUsuarioToUsuario2(usuarioService.findAll());
 	}
 	
 	@GetMapping("/usuarios/{id}")
@@ -58,7 +68,7 @@ public class UsuarioRestController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
+		return new ResponseEntity<Usuario2>(convertFromUsuarioToUsuario2(usuario), HttpStatus.OK);
 	}
 	
 	@PostMapping("/usuarios/nuevo")
@@ -88,7 +98,7 @@ public class UsuarioRestController {
 		
 		response.put("mensaje", "El usuario ha sido creado con éxito!");
 		response.put("usuario", usuarioNew);
-		return new ResponseEntity<Usuario>(usuario, HttpStatus.CREATED);
+		return new ResponseEntity<Usuario2>(convertFromUsuarioToUsuario2(usuario), HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/usuarios/{id}")
@@ -157,20 +167,93 @@ public class UsuarioRestController {
 //		response.put("mensaje", "El usuario ha sido actualizado con éxito!");
 //		response.put("usuario", usuarioUpdated);
 
-		return new ResponseEntity<Usuario>(usuarioUpdated, HttpStatus.OK);
+		return new ResponseEntity<Usuario2>(convertFromUsuarioToUsuario2(usuarioUpdated), HttpStatus.OK);
 	}
 	
 	@GetMapping("/usuarios/nombre/{nombre}")
-	public List<Usuario> findByNombre(@PathVariable String nombre) {
-		return usuarioService.findByNombre(nombre);
+	public List<Usuario2> findByNombre(@PathVariable String nombre) {
+		return convertListFromUsuarioToUsuario2(usuarioService.findByNombre(nombre));
 	}
 	
 	@GetMapping("/usuarios/validar/{correo}/{contrasenya}")
-	public Usuario findByNombre(@PathVariable String correo, @PathVariable String contrasenya) {
+	public Usuario2 findByNombre(@PathVariable String correo, @PathVariable String contrasenya) {
 		Usuario usuario = new Usuario();
 		usuario.setCorreo(correo);
 		usuario.setContrasenya(contrasenya);
-		return usuarioService.validar(usuario);
+		return convertFromUsuarioToUsuario2(usuarioService.validar(usuario));
+	}
+	
+	
+	public Usuario2 getUsuarioAvatar(Usuario usuario) {
+		
+		Usuario2 usuario2 = new Usuario2(usuario);
+		
+		try {
+			
+		HttpClient httpClient = HttpClientBuilder.create().build();
+		HttpPost postRequest = new HttpPost("http://192.168.8.226:8069/jsonrpc");
+		
+		Map<String, Object> response2 = new HashMap<>();		
+			
+			JSONObject jsonRpcRequest = new JSONObject();
+			jsonRpcRequest.put("jsonrpc", "2.0");
+			jsonRpcRequest.put("id", 1);
+			jsonRpcRequest.put("method", "call");
+			JSONObject params = new JSONObject();
+			params.put("service", "object");
+			params.put("method", "execute");
+			JSONArray args = new JSONArray();
+			args.put("sge22");
+			args.put(2);
+			args.put("1234");
+			args.put("res.partner");
+			args.put("read");
+			args.put(usuario.getId());
+			JSONArray campo = new JSONArray();
+			campo.put("avatar");
+			args.put(campo);
+			params.put("args", args);
+			jsonRpcRequest.put("params", params);
+			
+			
+			
+			
+			StringEntity input = new StringEntity(jsonRpcRequest.toString());
+			input.setContentType("application/json");
+			postRequest.setEntity(input);
+			
+			
+	
+			HttpResponse response3 = httpClient.execute(postRequest);
+			String jsonResponse = EntityUtils.toString(response3.getEntity());
+			JSONObject jsonRpcResponse = new JSONObject(jsonResponse);
+			
+			String total = ((JSONObject) jsonRpcResponse.getJSONArray("result").get(0)).getString("avatar");
+			System.out.println(total);
+
+			
+			if(!total.equals("")) {
+				usuario2.setAvatar(total);
+			}
+
+		} catch(Exception e) {
+			e.getMessage();
+		}
+			
+			return usuario2;
+	}
+	
+	
+	public List<Usuario2> convertListFromUsuarioToUsuario2(List<Usuario> usuarios){
+		List<Usuario2> usuarios2 = new ArrayList();
+		for( int i = 0; i< usuarios.size(); i++) {
+			usuarios2.add(getUsuarioAvatar(usuarios.get(i)));
+		}
+		return usuarios2;
+	}
+	
+	public Usuario2 convertFromUsuarioToUsuario2(Usuario usuario){
+		return getUsuarioAvatar(usuario);
 	}
 
 }
