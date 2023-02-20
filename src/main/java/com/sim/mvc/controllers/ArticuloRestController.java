@@ -95,7 +95,7 @@ public class ArticuloRestController {
 			return null;
 		}
 		response.put("mensaje", "El articulo ha sido creado con éxito!");
-		response.put("articulo", articuloNew);
+		response.put("articulo", articuloNew2);
 		return new ResponseEntity<Articulo2>(articuloNew2, HttpStatus.CREATED);
 	}
 	
@@ -127,12 +127,14 @@ public class ArticuloRestController {
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());			
 			response.put("errors", errors);
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+//			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+			return null;
 		}		
 		if (articuloActual == null) {
 			response.put("mensaje", "Error: no se pudo editar, el articulo ID: "
 					.concat(id.toString().concat(" no existe en la base de datos!")));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+//			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+			return null;
 		}
 		try {		
 			articuloActual2.setTitulo(articulo.getTitulo());
@@ -154,7 +156,8 @@ public class ArticuloRestController {
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al actualizar el articulo en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+//			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return null;
 		}
 
 		response.put("mensaje", "El articulo ha sido actualizado con éxito!");
@@ -247,16 +250,11 @@ public class ArticuloRestController {
 	}
 	
 	public Articulo2 getArticuloFoto(Articulo articulo) {
-		
 		Articulo2 articulo2 = new Articulo2(articulo);
-		
-		try {
-			
+		try {	
 		HttpClient httpClient = HttpClientBuilder.create().build();
 		HttpPost postRequest = new HttpPost("http://192.168.8.226:8069/jsonrpc");
-		
-		Map<String, Object> response2 = new HashMap<>();		
-			
+		Map<String, Object> response2 = new HashMap<>();			
 			JSONObject jsonRpcRequest = new JSONObject();
 			jsonRpcRequest.put("jsonrpc", "2.0");
 			jsonRpcRequest.put("id", 1);
@@ -276,7 +274,6 @@ public class ArticuloRestController {
 			args.put(campo);
 			params.put("args", args);
 			jsonRpcRequest.put("params", params);
-			
 			StringEntity input = new StringEntity(jsonRpcRequest.toString());
 			input.setContentType("application/json");
 			postRequest.setEntity(input);			

@@ -92,6 +92,7 @@ public class Usuario implements Serializable {
 	public Usuario() {
 		super();
 	}
+	
 
 	public Usuario(Long id, String nombre, String apellidos, String ubicacion, String contrasenya, String correo, boolean isUser) {
 		super();
@@ -102,6 +103,16 @@ public class Usuario implements Serializable {
 		this.contrasenya = contrasenya;
 		this.correo = correo;
 		this.isUser = isUser;
+	}
+	
+	public Usuario(Usuario2 usuario) {
+		this.id = usuario.getId();
+		this.nombre = usuario.getNombre();
+		this.apellidos = usuario.getApellidos();
+		this.ubicacion = usuario.getUbicacion();
+		this.contrasenya = usuario.getContrasenya();
+		this.correo = usuario.getCorreo();
+		this.isUser = usuario.getUser();
 	}
 
 	@Override

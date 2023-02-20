@@ -72,33 +72,33 @@ public class UsuarioRestController {
 	}
 	
 	@PostMapping("/usuarios/nuevo")
-	public ResponseEntity<?> create(@RequestBody Usuario usuario, BindingResult result) {
-		
-		Usuario usuarioNew = null;
+	public ResponseEntity<?> create(@RequestBody Usuario2 usuario, BindingResult result) {
+		Usuario2 usuarioNew2 = null;
+		Usuario usuarioNew = new Usuario(usuario);
 		Map<String, Object> response = new HashMap<>();
-		
 		if(result.hasErrors()) {
-
 			List<String> errors = result.getFieldErrors()
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-			
 			response.put("errors", errors);
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+//			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+			return null;
 		}
-		
 		try {
-			usuarioNew = usuarioService.save(usuario);
+			usuarioNew2 = getUsuarioAvatar(usuarioService.save(usuarioNew));
+			usuarioNew2.setAvatar(usuario.getAvatar());
+			updateUsuarioAvatar(usuarioNew2);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar el insert en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+//			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return null;
 		}
 		
 		response.put("mensaje", "El usuario ha sido creado con éxito!");
-		response.put("usuario", usuarioNew);
-		return new ResponseEntity<Usuario2>(convertFromUsuarioToUsuario2(usuario), HttpStatus.CREATED);
+		response.put("usuario", usuarioNew2);
+		return new ResponseEntity<Usuario2>(usuarioNew2, HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/usuarios/{id}")
@@ -121,53 +121,54 @@ public class UsuarioRestController {
 	
 	
 	@PutMapping("/usuarios/{id}")
-	public ResponseEntity<?> update(@RequestBody Usuario usuario, BindingResult result, @PathVariable Long id) {
-
+	public ResponseEntity<?> update(@RequestBody Usuario2 usuario, BindingResult result, @PathVariable Long id) {
 		Usuario usuarioActual = usuarioService.findById(id);
-
-		Usuario usuarioUpdated = null;
-
-//		Map<Usuario, Object> response = new HashMap<>();
-		
+		Usuario2 usuarioActual2 = convertFromUsuarioToUsuario2(usuarioActual);
+		Usuario2 usuarioUpdated = null;
+		Map<String, Object> response = new HashMap<>();
 		if(result.hasErrors()) {
-
 			List<String> errors = result.getFieldErrors()
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-			
-//			response.put("errors", errors);
+			response.put("errors", errors);
+//			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 			return null;
 		}
 		
 		if (usuarioActual == null) {
-//			response.put("mensaje", "Error: no se pudo editar, el usuario ID: "
-//					.concat(id.toString().concat(" no existe en la base de datos!")));
+			response.put("mensaje", "Error: no se pudo editar, el usuario ID: "
+					.concat(id.toString().concat(" no existe en la base de datos!")));
+//			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			return null;
 		}
 
 		try {
 
-			usuarioActual.setNombre(usuario.getNombre());
-			usuarioActual.setApellidos(usuario.getApellidos());
-			usuarioActual.setUbicacion(usuario.getUbicacion());
-			usuarioActual.setCorreo(usuario.getCorreo());
-			usuarioActual.setContrasenya(usuario.getContrasenya());
-//			usuarioActual.setAvatar(usuario.getAvatar());
-			usuarioActual.setUser(usuario.getUser());
+			usuarioActual2.setNombre(usuario.getNombre());
+			usuarioActual2.setApellidos(usuario.getApellidos());
+			usuarioActual2.setUbicacion(usuario.getUbicacion());
+			usuarioActual2.setCorreo(usuario.getCorreo());
+			usuarioActual2.setContrasenya(usuario.getContrasenya());
+			usuarioActual2.setAvatar(usuario.getAvatar());
+			usuarioActual2.setUser(usuario.getUser());
 
-			usuarioUpdated = usuarioService.save(usuarioActual);
+			Usuario u = new Usuario(usuarioActual2);
+			usuarioUpdated = convertFromUsuarioToUsuario2(usuarioService.save(u));
+			usuarioUpdated.setAvatar(usuario.getAvatar());
+			updateUsuarioAvatar(usuarioUpdated);
 
 		} catch (DataAccessException e) {
-//			response.put("mensaje", "Error al actualizar el usuario en la base de datos");
-//			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			response.put("mensaje", "Error al actualizar el usuario en la base de datos");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+//			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			return null;
 		}
 
-//		response.put("mensaje", "El usuario ha sido actualizado con éxito!");
-//		response.put("usuario", usuarioUpdated);
+		response.put("mensaje", "El usuario ha sido actualizado con éxito!");
+		response.put("usuario", usuarioUpdated);
 
-		return new ResponseEntity<Usuario2>(convertFromUsuarioToUsuario2(usuarioUpdated), HttpStatus.OK);
+		return new ResponseEntity<Usuario2>(usuarioUpdated, HttpStatus.OK);
 	}
 	
 	@GetMapping("/usuarios/nombre/{nombre}")
@@ -241,6 +242,45 @@ public class UsuarioRestController {
 		}
 			
 			return usuario2;
+	}
+	
+	public void updateUsuarioAvatar(Usuario2 usuario) {
+		try {		
+		HttpClient httpClient = HttpClientBuilder.create().build();
+		HttpPost postRequest = new HttpPost("http://192.168.8.226:8069/jsonrpc");	
+		Map<String, Object> response2 = new HashMap<>();				
+			JSONObject jsonRpcRequest = new JSONObject();
+			jsonRpcRequest.put("jsonrpc", "2.0");
+			jsonRpcRequest.put("id", 1);
+			jsonRpcRequest.put("method", "call");
+			JSONObject params = new JSONObject();
+			params.put("service", "object");
+			params.put("method", "execute");
+			JSONArray args = new JSONArray();
+			args.put("sge22");
+			args.put(2);
+			args.put("1234");
+			args.put("res.partner");
+			args.put("write");
+			args.put(usuario.getId());
+			JSONObject objecte = new JSONObject();
+			objecte.put("avatar", usuario.getAvatar());
+			
+			args.put(objecte);
+			params.put("args", args);
+			jsonRpcRequest.put("params", params);
+				
+			StringEntity input = new StringEntity(jsonRpcRequest.toString());
+			input.setContentType("application/json");
+			postRequest.setEntity(input);
+			
+			HttpResponse response3 = httpClient.execute(postRequest);
+			String jsonResponse = EntityUtils.toString(response3.getEntity());
+			JSONObject jsonRpcResponse = new JSONObject(jsonResponse);
+			
+		} catch(Exception e) {
+			e.getMessage();
+		}	
 	}
 	
 	
