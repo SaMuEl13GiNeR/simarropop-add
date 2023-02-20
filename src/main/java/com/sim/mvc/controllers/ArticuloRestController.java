@@ -43,7 +43,6 @@ public class ArticuloRestController {
 	@Autowired
 	@Qualifier("ArticuloServiceImpl")
 	private IArticuloService articuloService;
-	
 
 	@GetMapping("/articulos")
 	public List<Articulo2> findAll() {
@@ -52,125 +51,105 @@ public class ArticuloRestController {
 	
 	@GetMapping("/articulos/{id}")
 	public ResponseEntity<?> findById(@PathVariable Long id) {
-		
 		Articulo articulo = null;
-	
-		Map<String, Object> response = new HashMap<>();
-		
+		Map<String, Object> response = new HashMap<>();	
 		try {
 			articulo = articuloService.findById(id);			
-	
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar la consulta en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		} 
-		
+//			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return null;
+		} 	
 		if(articulo == null) {
 			response.put("mensaje", "El articulo ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+//			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+			return null;
 		}
-		
 		return new ResponseEntity<Articulo2>(convertFromArticuloToArticulo2(articulo), HttpStatus.OK);
 	}
 	
 	@PostMapping("/articulos/nuevo")
-	public ResponseEntity<?> create(@RequestBody Articulo articulo, BindingResult result) {
-//		articulo.setPartnerID(articulo.getUsuarioVendedor().getId().intValue());
-//		articulo.setName(articulo.getTitulo());
-//		articulo.setDateOrder(new Timestamp(System.currentTimeMillis()));
-//		articulo.setPartner_invoice_id(82);
-//		articulo.setPartner_shipping_id(82);
-//		articulo.setPricelist_id(1);
-//		articulo.setCompany_id(1);
-		
-		Articulo articuloNew = null;
+	public ResponseEntity<?> create(@RequestBody Articulo2 articulo, BindingResult result) {
+		Articulo2 articuloNew2 = null;
+		Articulo articuloNew = new Articulo(articulo);
 		Map<String, Object> response = new HashMap<>();
-		
 		if(result.hasErrors()) {
 			List<String> errors = result.getFieldErrors()
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-			
 			response.put("errors", errors);
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+//			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+			return null;
 		}
-		
 		try {
-			System.out.println(articulo.toString());
-			articuloNew = articuloService.save(articulo);
+//			System.out.println(articulo.toString());
+			articuloNew2 = getArticuloFoto(articuloService.save(articuloNew));
+			articuloNew2.setFoto(articulo.getFoto());
+			updateArticuloFoto(articuloNew2);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar el insert en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+//			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return null;
 		}
-		
 		response.put("mensaje", "El articulo ha sido creado con éxito!");
 		response.put("articulo", articuloNew);
-		return new ResponseEntity<Articulo2>(convertFromArticuloToArticulo2(articuloNew), HttpStatus.CREATED);
+		return new ResponseEntity<Articulo2>(articuloNew2, HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/articulos/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id) {
-		
 		Map<String, Object> response = new HashMap<>();
-		
 		try {
 			articuloService.delete(id);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al eliminar el articulo de la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+//			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+			return null;
 		}
-		
 		response.put("mensaje", "Articulo eliminado con éxito!");
-		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	
 	
 	@PutMapping("/articulos/{id}")
-	public ResponseEntity<?> update(@RequestBody Articulo articulo, BindingResult result, @PathVariable Long id) {
-
+	public ResponseEntity<?> update(@RequestBody Articulo2 articulo, BindingResult result, @PathVariable Long id) {
 		Articulo articuloActual = articuloService.findById(id);
-
-		Articulo articuloUpdated = null;
-
-		Map<String, Object> response = new HashMap<>();
-		
+		Articulo2 articuloActual2 = convertFromArticuloToArticulo2(articuloActual);
+		Articulo2 articuloUpdated = null;
+		Map<String, Object> response = new HashMap<>();	
 		if(result.hasErrors()) {
-
 			List<String> errors = result.getFieldErrors()
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
-					.collect(Collectors.toList());
-			
+					.collect(Collectors.toList());			
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
-		}
-		
+		}		
 		if (articuloActual == null) {
 			response.put("mensaje", "Error: no se pudo editar, el articulo ID: "
 					.concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
-
-		try {
-//			
-			articuloActual.setTitulo(articulo.getTitulo());
-			articuloActual.setLikes(articulo.getLikes());
-			articuloActual.setDescripcion(articulo.getDescripcion());
-			articuloActual.setPrecio(articulo.getPrecio());
-			articuloActual.setEstado(articulo.getEstado());
-			articuloActual.setUsuarioComprador(articulo.getUsuarioComprador());
-			articuloActual.setUsuarioVendedor(articulo.getUsuarioVendedor());
-			articuloActual.setVendido(articulo.getVendido());
-			articuloActual.setCategoria(articulo.getCategoria());
-//			articuloActual.setFoto(articulo.getFoto());
-
-
-			articuloUpdated = articuloService.save(articuloActual);
+		try {		
+			articuloActual2.setTitulo(articulo.getTitulo());
+			articuloActual2.setLikes(articulo.getLikes());
+			articuloActual2.setDescripcion(articulo.getDescripcion());
+			articuloActual2.setPrecio(articulo.getPrecio());
+			articuloActual2.setEstado(articulo.getEstado());
+			articuloActual2.setUsuarioComprador(articulo.getUsuarioComprador());
+			articuloActual2.setUsuarioVendedor(articulo.getUsuarioVendedor());
+			articuloActual2.setVendido(articulo.getVendido());
+			articuloActual2.setCategoria(articulo.getCategoria());
+			articuloActual2.setFoto(articulo.getFoto());
+			
+			Articulo a = new Articulo(articuloActual2);
+			articuloUpdated = convertFromArticuloToArticulo2(articuloService.save(a));
+			articuloUpdated.setFoto(articulo.getFoto());
+			updateArticuloFoto(articuloUpdated);
 
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al actualizar el articulo en la base de datos");
@@ -181,7 +160,7 @@ public class ArticuloRestController {
 		response.put("mensaje", "El articulo ha sido actualizado con éxito!");
 		response.put("articulo", articuloUpdated);
 
-		return new ResponseEntity<Articulo2>(convertFromArticuloToArticulo2(articuloUpdated), HttpStatus.CREATED);
+		return new ResponseEntity<Articulo2>(articuloUpdated, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/articulos/usuarioVendedor/{id}")
@@ -298,22 +277,16 @@ public class ArticuloRestController {
 			params.put("args", args);
 			jsonRpcRequest.put("params", params);
 			
-			
-			
-			
 			StringEntity input = new StringEntity(jsonRpcRequest.toString());
 			input.setContentType("application/json");
-			postRequest.setEntity(input);
-			
-			
+			postRequest.setEntity(input);			
 	
 			HttpResponse response3 = httpClient.execute(postRequest);
 			String jsonResponse = EntityUtils.toString(response3.getEntity());
 			JSONObject jsonRpcResponse = new JSONObject(jsonResponse);
 			
 			String total = ((JSONObject) jsonRpcResponse.getJSONArray("result").get(0)).getString("foto");
-			System.out.println(total);
-
+//			System.out.println(total);
 			
 			if(!total.equals("")) {
 				articulo2.setFoto(total);
@@ -324,6 +297,45 @@ public class ArticuloRestController {
 		}
 			
 			return articulo2;
+	}
+	
+	public void updateArticuloFoto(Articulo2 articulo) {
+		try {		
+		HttpClient httpClient = HttpClientBuilder.create().build();
+		HttpPost postRequest = new HttpPost("http://192.168.8.226:8069/jsonrpc");	
+		Map<String, Object> response2 = new HashMap<>();				
+			JSONObject jsonRpcRequest = new JSONObject();
+			jsonRpcRequest.put("jsonrpc", "2.0");
+			jsonRpcRequest.put("id", 1);
+			jsonRpcRequest.put("method", "call");
+			JSONObject params = new JSONObject();
+			params.put("service", "object");
+			params.put("method", "execute");
+			JSONArray args = new JSONArray();
+			args.put("sge22");
+			args.put(2);
+			args.put("1234");
+			args.put("simarropop.articulo");
+			args.put("write");
+			args.put(articulo.getId());
+			JSONObject objecte = new JSONObject();
+			objecte.put("foto", articulo.getFoto());
+			
+			args.put(objecte);
+			params.put("args", args);
+			jsonRpcRequest.put("params", params);
+				
+			StringEntity input = new StringEntity(jsonRpcRequest.toString());
+			input.setContentType("application/json");
+			postRequest.setEntity(input);
+			
+			HttpResponse response3 = httpClient.execute(postRequest);
+			String jsonResponse = EntityUtils.toString(response3.getEntity());
+			JSONObject jsonRpcResponse = new JSONObject(jsonResponse);
+			
+		} catch(Exception e) {
+			e.getMessage();
+		}	
 	}
 	
 	public List<Articulo2> convertListFromArticuloToArticulo2(List<Articulo> articulos){

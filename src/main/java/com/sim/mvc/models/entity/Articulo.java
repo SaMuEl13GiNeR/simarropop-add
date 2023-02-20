@@ -127,8 +127,36 @@ public class Articulo implements Serializable {
 		this.vendido = vendido;
 	}
 	
+	public Articulo(Articulo2 articulo2) {
+		this.id = articulo2.getId();
+		this.titulo = articulo2.getTitulo();
+		this.likes = articulo2.getLikes();
+		this.descripcion = articulo2.getDescripcion();
+		this.precio = articulo2.getPrecio();
+		this.estado = articulo2.getEstado();
+		this.vendido = articulo2.getVendido();
+		this.usuarioVendedor = articulo2.getUsuarioVendedor();
+		this.usuarioComprador = articulo2.getUsuarioComprador();
+		this.categoria = articulo2.getCategoria();
+	}
+	
+	
 
 
+	public Articulo(Long id, String titulo, int likes, String descripcion, float precio, String estado, boolean vendido,
+			Usuario usuarioVendedor, Usuario usuarioComprador, Categoria categoria) {
+		super();
+		this.id = id;
+		this.titulo = titulo;
+		this.likes = likes;
+		this.descripcion = descripcion;
+		this.precio = precio;
+		this.estado = estado;
+		this.vendido = vendido;
+		this.usuarioVendedor = usuarioVendedor;
+		this.usuarioComprador = usuarioComprador;
+		this.categoria = categoria;
+	}
 
 	public Articulo() {
 		super();
