@@ -26,9 +26,13 @@ public interface IArticuloService {
 	
 	public List<Articulo> findByCategoriaId(Long id);
 	
-	public List<Articulo> findAllOrderByLowerPrecio();
+	public List<Articulo> findAllOrderByLowerPrecio(Long id);
 	
-	public List<Articulo> findAllOrderByHigherPrecio();
+	public List<Articulo> findAllOrderByHigherPrecio(Long id);
+	
+	public List<Articulo> findAllOrderByTituloASC(Long id);
+	
+	public List<Articulo> findAllOrderByTituloDESC(Long id);
 	
 	public List<Articulo> findByTitulo(String titulo);
 	

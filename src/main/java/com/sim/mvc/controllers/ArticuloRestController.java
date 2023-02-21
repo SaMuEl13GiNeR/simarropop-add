@@ -176,14 +176,24 @@ public class ArticuloRestController {
 		return convertListFromArticuloToArticulo2(articuloService.findByCategoriaId(id));
 	}
 	
-	@GetMapping("/articulos/precio/lower")
-	public List<Articulo2> findAllOrderByLowerPrecio(){
-		return convertListFromArticuloToArticulo2(articuloService.findAllOrderByLowerPrecio());
+	@GetMapping("/articulos/precio/lower/{id}")
+	public List<Articulo2> findAllOrderByLowerPrecio(@PathVariable Long id){
+		return convertListFromArticuloToArticulo2(articuloService.findAllOrderByLowerPrecio(id));
 	}
 	
-	@GetMapping("/articulos/precio/higher")
-	public List<Articulo2> findAllOrderByHigherPrecio(){
-		return convertListFromArticuloToArticulo2(articuloService.findAllOrderByHigherPrecio());
+	@GetMapping("/articulos/precio/higher/{id}")
+	public List<Articulo2> findAllOrderByHigherPrecio(@PathVariable Long id){
+		return convertListFromArticuloToArticulo2(articuloService.findAllOrderByHigherPrecio(id));
+	}
+	
+	@GetMapping("/articulos/titulo/asc/{id}")
+	public List<Articulo2> findAllOrderByTituloASC(@PathVariable Long id){
+		return convertListFromArticuloToArticulo2(articuloService.findAllOrderByTituloASC(id));
+	}
+	
+	@GetMapping("/articulos/titulo/desc/{id}")
+	public List<Articulo2> findAllOrderByTituloDESC(@PathVariable Long id){
+		return convertListFromArticuloToArticulo2(articuloService.findAllOrderByTituloDESC(id));
 	}
 	
 	@GetMapping("/articulos/titulo/")

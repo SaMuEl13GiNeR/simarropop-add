@@ -60,15 +60,25 @@ public class ArticuloServiceImpl implements IArticuloService{
 	}
 
 	@Override
-	public List<Articulo> findAllOrderByLowerPrecio() {
-		return articuloDao.findAllOrderByLowerPrecio();
+	public List<Articulo> findAllOrderByLowerPrecio(Long id) {
+		return articuloDao.findAllOrderByLowerPrecio(id);
 	}
 
 	@Override
-	public List<Articulo> findAllOrderByHigherPrecio() {
-		return articuloDao.findAllOrderByHigherPrecio();
+	public List<Articulo> findAllOrderByHigherPrecio(Long id) {
+		return articuloDao.findAllOrderByHigherPrecio(id);
 	}
 
+	@Override
+	public List<Articulo> findAllOrderByTituloASC(Long id) {
+		return articuloDao.findAllOrderByTituloASC(id);
+	}
+	
+	@Override
+	public List<Articulo> findAllOrderByTituloDESC(Long id) {
+		return articuloDao.findAllOrderByTituloDESC(id);
+	}
+	
 	@Override
 	public List<Articulo> findByTitulo(String titulo) {
 		return articuloDao.findByTitulo(titulo);

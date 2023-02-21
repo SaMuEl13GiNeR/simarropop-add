@@ -18,11 +18,11 @@ public interface IArticuloDAO extends JpaRepository<Articulo, Long> {
 	@Query("FROM Articulo a WHERE a.categoria.id = :id")
 	List<Articulo> findByCategoriaId(@Param("id") Long id);
 	
-	@Query("FROM Articulo a ORDER BY a.precio ASC")
-	List<Articulo> findAllOrderByLowerPrecio();
+	@Query("FROM Articulo a WHERE a.usuarioVendedor.id != :id AND a.vendido = false  ORDER BY a.precio ASC")
+	List<Articulo> findAllOrderByLowerPrecio(@Param("id") Long id);
 	
-	@Query("FROM Articulo a ORDER BY a.precio DESC")
-	List<Articulo> findAllOrderByHigherPrecio();
+	@Query("FROM Articulo a WHERE a.usuarioVendedor.id != :id AND a.vendido = false ORDER BY a.precio DESC")
+	List<Articulo> findAllOrderByHigherPrecio(@Param("id") Long id);
 	
 	@Query("FROM Articulo a WHERE lower(a.titulo) LIKE lower(concat('%',:titulo,'%'))")
 	List<Articulo> findByTitulo(@Param("titulo") String titulo);
@@ -42,4 +42,9 @@ public interface IArticuloDAO extends JpaRepository<Articulo, Long> {
 	@Query("FROM Articulo a WHERE a.usuarioVendedor.id = :id AND a.vendido = false")
 	List<Articulo> findAllUsuarioNoVendidos(@Param("id") Long id);
 
+	@Query("FROM Articulo a WHERE a.usuarioVendedor.id != :id AND a.vendido = false  ORDER BY a.titulo ASC")
+	List<Articulo> findAllOrderByTituloASC(@Param("id") Long id);
+	
+	@Query("FROM Articulo a WHERE a.usuarioVendedor.id != :id AND a.vendido = false ORDER BY a.titulo DESC")
+	List<Articulo> findAllOrderByTituloDESC(@Param("id") Long id);
 }
