@@ -171,6 +171,16 @@ public class ArticuloRestController {
 		return convertListFromArticuloToArticulo2(articuloService.findByUsuarioVendedorId(id));
 	}
 	
+	@GetMapping("/articulos/usuarioVendedor/{id}/vendidos")
+	public List<Articulo2> findByUsuarioVendedorIdVendido(@PathVariable Long id){
+		return convertListFromArticuloToArticulo2(articuloService.findByUsuarioVendedorIdVendido(id));
+	}
+	
+	@GetMapping("/articulos/usuarioVendedor/{id}/noVendidos")
+	public List<Articulo2> findByUsuarioVendedorIdNoVendido(@PathVariable Long id){
+		return convertListFromArticuloToArticulo2(articuloService.findByUsuarioVendedorIdNoVendido(id));
+	}
+	
 	@GetMapping("/articulos/usuarioComprador/{id}")
 	public List<Articulo2> findByUsuarioCompradorId(@PathVariable Long id){
 		return convertListFromArticuloToArticulo2(articuloService.findByUsuarioCompradorId(id));

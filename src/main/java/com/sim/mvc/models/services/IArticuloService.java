@@ -22,6 +22,10 @@ public interface IArticuloService {
 	
 	public List<Articulo> findByUsuarioVendedorId(Long id);
 	
+	public List<Articulo> findByUsuarioVendedorIdVendido(Long id);
+	
+	public List<Articulo> findByUsuarioVendedorIdNoVendido(Long id);
+	
 	public List<Articulo> findByUsuarioCompradorId(Long id);
 	
 	public List<Articulo> findByCategoriaId(Long id);
