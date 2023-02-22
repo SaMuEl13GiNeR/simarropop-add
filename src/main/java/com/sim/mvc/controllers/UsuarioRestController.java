@@ -147,7 +147,8 @@ public class UsuarioRestController {
 
 			usuarioActual2.setNombre(usuario.getNombre());
 			usuarioActual2.setApellidos(usuario.getApellidos());
-			usuarioActual2.setUbicacion(usuario.getUbicacion());
+			usuarioActual2.setLat(usuario.getLat());
+			usuarioActual2.setLon(usuario.getLon());
 			usuarioActual2.setCorreo(usuario.getCorreo());
 			usuarioActual2.setContrasenya(usuario.getContrasenya());
 			usuarioActual2.setAvatar(usuario.getAvatar());

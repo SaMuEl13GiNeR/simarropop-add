@@ -19,8 +19,11 @@ public class Usuario2 implements Serializable {
 	@Column(name="apellidos")
 	private String apellidos;
 	
-	@Column(name="ubicacion")
-	private String ubicacion;
+	@Column(name="lat")
+	private float lat;
+	
+	@Column(name="lon")
+	private float lon;
 	
 	@Column(name="contrasenya")
 	private String contrasenya;
@@ -60,12 +63,20 @@ public class Usuario2 implements Serializable {
 		this.apellidos = apellidos;
 	}
 
-	public String getUbicacion() {
-		return ubicacion;
+	public float getLat() {
+		return lat;
 	}
 
-	public void setUbicacion(String ubicacion) {
-		this.ubicacion = ubicacion;
+	public void setLat(float lat) {
+		this.lat = lat;
+	}
+
+	public float getLon() {
+		return lon;
+	}
+
+	public void setLon(float lon) {
+		this.lon = lon;
 	}
 
 	public String getContrasenya() {
@@ -103,25 +114,27 @@ public class Usuario2 implements Serializable {
 	public Usuario2() {
 		super();
 	}
-
-	public Usuario2(Long id, String nombre, String apellidos, String ubicacion, String contrasenya, String correo,
+	
+	public Usuario2(Long id, String nombre, String apellidos, float lat, float lon, String contrasenya, String correo,
 			String avatar, boolean isUser) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
-		this.ubicacion = ubicacion;
+		this.lat = lat;
+		this.lon = lon;
 		this.contrasenya = contrasenya;
 		this.correo = correo;
 		this.avatar = avatar;
 		this.isUser = isUser;
 	}
-	
+
 	public Usuario2(Usuario usuario) {
 		this.id = usuario.getId();
 		this.nombre = usuario.getNombre();
 		this.apellidos = usuario.getApellidos();
-		this.ubicacion = usuario.getUbicacion();
+		this.lat = usuario.getLat();
+		this.lon = usuario.getLon();
 		this.contrasenya = usuario.getContrasenya();
 		this.correo = usuario.getCorreo();
 		this.isUser = usuario.getUser();
@@ -129,10 +142,12 @@ public class Usuario2 implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Usuario2 [id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", ubicacion=" + ubicacion
-				+ ", contrasenya=" + contrasenya + ", correo=" + correo + ", avatar=" + avatar + ", isUser=" + isUser
-				+ "]";
+		return "Usuario2 [id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", lat=" + lat + ", lon="
+				+ lon + ", contrasenya=" + contrasenya + ", correo=" + correo + ", avatar=" + avatar + ", isUser="
+				+ isUser + "]";
 	}
+
+	
 
   
     
