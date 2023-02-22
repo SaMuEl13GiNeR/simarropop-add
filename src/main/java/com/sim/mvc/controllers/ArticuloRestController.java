@@ -170,6 +170,11 @@ public class ArticuloRestController {
 	public List<Articulo2> findByUsuarioId(@PathVariable Long id){
 		return convertListFromArticuloToArticulo2(articuloService.findByUsuarioVendedorId(id));
 	}
+	
+	@GetMapping("/articulos/usuarioComprador/{id}")
+	public List<Articulo2> findByUsuarioCompradorId(@PathVariable Long id){
+		return convertListFromArticuloToArticulo2(articuloService.findByUsuarioCompradorId(id));
+	}
 
 	@GetMapping("/articulos/categoria/{id}")
 	public List<Articulo2> findByCategoriaId(@PathVariable Long id){
