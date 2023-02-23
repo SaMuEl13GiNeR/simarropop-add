@@ -117,6 +117,7 @@ public class ArticuloRestController {
 	
 	@PutMapping("/articulos/{id}")
 	public ResponseEntity<?> update(@RequestBody Articulo2 articulo, BindingResult result, @PathVariable Long id) {
+		System.out.println(articulo.toString());
 		Articulo articuloActual = articuloService.findById(id);
 		Articulo2 articuloActual2 = convertFromArticuloToArticulo2(articuloActual);
 		Articulo2 articuloUpdated = null;
@@ -144,11 +145,15 @@ public class ArticuloRestController {
 			articuloActual2.setEstado(articulo.getEstado());
 			articuloActual2.setUsuarioComprador(articulo.getUsuarioComprador());
 			articuloActual2.setUsuarioVendedor(articulo.getUsuarioVendedor());
-			articuloActual2.setVendido(articulo.getVendido());
 			articuloActual2.setCategoria(articulo.getCategoria());
 			articuloActual2.setFoto(articulo.getFoto());
 			
+			if(articulo.getUsuarioComprador() != null) {
+				articuloActual2.setVendido(true);
+			}
+			
 			Articulo a = new Articulo(articuloActual2);
+			System.out.println(a.toString());
 			articuloUpdated = convertFromArticuloToArticulo2(articuloService.save(a));
 			articuloUpdated.setFoto(articulo.getFoto());
 			updateArticuloFoto(articuloUpdated);

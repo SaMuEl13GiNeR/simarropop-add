@@ -29,7 +29,7 @@ public class Articulo implements Serializable {
 	private String estado;
 	
 	@Column(name="vendido")
-	private boolean vendido = false;
+	private boolean vendido ;
 	
 	@ManyToOne
 	@JoinColumn(name = "usuario_vendedor", nullable = true)
